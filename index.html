@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>GradeClash: Free Kids vs. Parents Trivia Game (US Grades 1–8)</title>
+  <meta name="description" content="Play GradeClash free online! A fast 3-5 minute Kids vs. Parents trivia board game for US Grades 1–8 with Math, Science, History, 50-50 Lifeline, Mystery Tile & Daily Challenges. No login required." />
+  <meta name="keywords" content="kids vs parents trivia game, free family trivia game online, 5th grade trivia game, educational board game no login, GradeClash" />
+  <link rel="canonical" href="https://gradeclash.com/" />
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:title" content="GradeClash: Kids vs. Parents Trivia Game" />
+  <meta property="og:description" content="Are you smarter than a 5th grader? Roll the dice and beat your family in this free US Grade 1–8 spiral board trivia game!" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://gradeclash.com/" />
+  <meta property="og:image" content="https://gradeclash.com/thumbnail.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="GradeClash: Free Kids vs. Parents Trivia Game" />
+  <meta name="twitter:description" content="Fast 3-5 minute family trivia board game for US Grades 1–8. Play free with zero login!" />
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "GradeClash: Kids vs. Parents Trivia",
+    "url": "https://gradeclash.com/",
+    "applicationCategory": "GameApplication",
+    "genre": ["Trivia", "Educational", "Board Game", "Family"],
+    "operatingSystem": "Any",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "A free, zero-login Kids vs. Parents trivia board game for US families and Grade 1-8 students with Fair-Play Handicap, Daily Challenges, 50-50 Lifeline, and Mystery Tile twists."
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-grad-1: #eef2ff;
+      --bg-grad-2: #fdf4ff;
+      --surface: #ffffff;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --p1: #2563eb;
+      --p1-light: #dbeafe;
+      --p2: #e11d48;
+      --p2-light: #ffe4e6;
+      --gold: #f59e0b;
+      --green: #10b981;
+      --purple: #7c3aed;
+      --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(160deg, var(--bg-grad-1) 0%, var(--bg-grad-2) 100%);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* TOP ZERO-SCROLL GAME VIEWPORT */
+    .game-viewport {
+      height: 100dvh;
+      min-height: 600px;
+      max-height: 940px;
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 8px 10px 10px;
+      position: relative;
+    }
+
+    /* Header */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      padding: 7px 12px;
+      border-radius: 14px;
+      box-shadow: 0 3px 10px rgba(15,23,42,0.06);
+      border: 1px solid rgba(255,255,255,0.8);
+    }
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .brand-logo {
+      font-weight: 900;
+      font-size: 1.05rem;
+      background: linear-gradient(135deg, #4f46e5, #db2777);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.4px;
+    }
+    .mode-pill {
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #ede9fe;
+      color: #5b21b6;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .streak-chip {
+      font-size: 0.75rem;
+      font-weight: 800;
+      background: #fef3c7;
+      color: #b45309;
+      padding: 4px 8px;
+      border-radius: 10px;
+      border: 1px solid #fde68a;
+    }
+    .icon-btn {
+      background: #f1f5f9;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: transform 0.1s;
+    }
+    .icon-btn:active { transform: scale(0.92); }
+
+    /* Player Docks */
+    .players-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .player-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 7px 10px;
+      border: 2px solid transparent;
+      box-shadow: 0 3px 8px rgba(15,23,42,0.05);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .player-card.p1.active {
+      border-color: var(--p1);
+      background: #f0f7ff;
+      box-shadow: 0 4px 14px rgba(37,99,235,0.2);
+    }
+    .player-card.p2.active {
+      border-color: var(--p2);
+      background: #fff1f2;
+      box-shadow: 0 4px 14px rgba(225,29,72,0.2);
+    }
+    .p-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .p-name {
+      font-size: 0.82rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .p-pos {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--muted);
+    }
+    .p-badges {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+    }
+    .lifeline-badge {
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: #dcfce7;
+      color: #166534;
+    }
+    .lifeline-badge.used {
+      background: #f1f5f9;
+      color: #94a3b8;
+      text-decoration: line-through;
+    }
+    .turn-dot {
+      font-size: 0.66rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    /* 5x5 Spiral Board */
+    .board-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 0;
+      min-height: 0;
+    }
+    .board-frame {
+      width: 100%;
+      max-width: 420px;
+      aspect-ratio: 1 / 1;
+      max-height: 100%;
+      background: #1e1b4b;
+      padding: 8px;
+      border-radius: 20px;
+      box-shadow: 0 10px 26px rgba(30,27,75,0.24), inset 0 2px 0 rgba(255,255,255,0.15);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 6px;
+      position: relative;
+    }
+    .board-frame.shake {
+      animation: boardShake 0.42s ease;
+    }
+    @keyframes boardShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px) rotate(-1deg); }
+      40% { transform: translateX(6px) rotate(1deg); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    .tile {
+      position: relative;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+      box-shadow: 0 4px 0 #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .tile.tile-start {
+      background: linear-gradient(180deg, #dbeafe 0%, #bfdbfe 100%);
+      box-shadow: 0 4px 0 #60a5fa;
+    }
+    .tile.tile-finish {
+      background: linear-gradient(180deg, #fef08a 0%, #f59e0b 100%);
+      box-shadow: 0 4px 0 #b45309;
+    }
+    .tile.tile-bonus {
+      background: linear-gradient(180deg, #dcfce7 0%, #86efac 100%);
+      box-shadow: 0 4px 0 #16a34a;
+    }
+    .tile.tile-slip {
+      background: linear-gradient(180deg, #fee2e2 0%, #fca5a5 100%);
+      box-shadow: 0 4px 0 #dc2626;
+    }
+    .tile.tile-mystery {
+      background: linear-gradient(180deg, #ede9fe 0%, #c4b5fd 100%);
+      box-shadow: 0 4px 0 #7c3aed;
+      animation: mysteryPulse 2.2s infinite;
+    }
+    @keyframes mysteryPulse {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.1); box-shadow: 0 4px 0 #7c3aed, 0 0 12px rgba(167,139,250,0.85); }
+    }
+    .tile.glow {
+      transform: scale(1.06);
+      z-index: 3;
+      box-shadow: 0 0 16px rgba(251,191,36,0.95), 0 4px 0 #d97706;
+    }
+
+    .tile-num {
+      position: absolute;
+      top: 3px;
+      left: 5px;
+      font-size: 0.62rem;
+      font-weight: 800;
+      color: rgba(15,23,42,0.55);
+    }
+    .tile-icon {
+      font-size: 1.15rem;
+      line-height: 1;
+    }
+    .tile-tag {
+      font-size: 0.54rem;
+      font-weight: 800;
+      color: #1e293b;
+      margin-top: 1px;
+    }
+
+    /* Tokens */
+    .tokens-layer {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      pointer-events: none;
+      z-index: 4;
+    }
+    .token {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 0.85rem;
+      border: 2.5px solid #fff;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.32);
+      transition: transform 0.16s ease;
+    }
+    .token.t1 { background: var(--p1); }
+    .token.t2 { background: var(--p2); }
+    .token.hop { transform: translateY(-7px) scale(1.16); }
+
+    /* Bottom Dice Dock */
+    .control-dock {
+      background: rgba(255,255,255,0.95);
+      border-radius: 16px;
+      padding: 9px 12px;
+      box-shadow: 0 4px 16px rgba(15,23,42,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .status-text {
+      flex: 1;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.25;
+    }
+    .status-sub {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .roll-btn {
+      background: linear-gradient(180deg, #4f46e5 0%, #4338ca 100%);
+      color: #fff;
+      border: none;
+      padding: 11px 18px;
+      border-radius: 13px;
+      font-size: 0.95rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #312e81;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: transform 0.1s;
+      white-space: nowrap;
+    }
+    .roll-btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #312e81; }
+    .roll-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .dice-face { font-size: 1.15rem; display: inline-block; }
+    .dice-face.rolling { animation: spinDice 0.35s linear infinite; }
+    @keyframes spinDice { 100% { transform: rotate(360deg); } }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.68);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      z-index: 100;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-card {
+      background: #fff;
+      width: 100%;
+      max-width: 430px;
+      border-radius: 22px;
+      padding: 20px 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      animation: popIn 0.2s ease;
+      max-height: 92dvh;
+      overflow-y: auto;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Setup Modal */
+    .setup-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 12px;
+      margin: 12px 0 14px;
+    }
+    .tab-btn {
+      border: none;
+      background: transparent;
+      padding: 9px 8px;
+      border-radius: 9px;
+      font-weight: 800;
+      font-size: 0.84rem;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: #fff;
+      color: #4f46e5;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .form-group { margin-bottom: 12px; }
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #334155;
+      margin-bottom: 5px;
+    }
+    .pill-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .choice-pill {
+      border: 2px solid var(--border);
+      background: #fff;
+      padding: 9px 8px;
+      border-radius: 11px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      color: #334155;
+    }
+    .choice-pill.selected {
+      border-color: #4f46e5;
+      background: #eef2ff;
+      color: #3730a3;
+    }
+    select.grade-select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 11px;
+      border: 2px solid var(--border);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #0f172a;
+      background: #fff;
+    }
+    .start-btn {
+      width: 100%;
+      background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+      color: #fff;
+      border: none;
+      padding: 13px;
+      border-radius: 13px;
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #047857;
+      margin-top: 6px;
+    }
+    .daily-box {
+      background: linear-gradient(135deg, #eef2ff, #fef3c7);
+      border: 1px solid #fde68a;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    /* Quiz Modal */
+    .quiz-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 8px;
+    }
+    .q-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4338ca;
+    }
+    .q-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .lifeline-btn {
+      background: #fef3c7;
+      color: #92400e;
+      border: 2px solid #f59e0b;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .lifeline-btn:disabled {
+      background: #f1f5f9;
+      color: #94a3b8;
+      border-color: #cbd5e1;
+      cursor: not-allowed;
+      text-decoration: line-through;
+    }
+    .timer-pill {
+      font-size: 0.82rem;
+      font-weight: 900;
+      background: #fee2e2;
+      color: #b91c1c;
+      padding: 4px 9px;
+      border-radius: 999px;
+      min-width: 44px;
+      text-align: center;
+    }
+    .q-text {
+      font-size: 1.06rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 10px 0 14px;
+      line-height: 1.38;
+    }
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 9px;
+    }
+    .opt-btn {
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: #fff;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #1e293b;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .opt-btn:hover:not(:disabled) { border-color: #6366f1; background: #f8fafc; }
+    .opt-btn.correct { background: #dcfce7; border-color: #16a34a; color: #14532d; }
+    .opt-btn.wrong { background: #fee2e2; border-color: #dc2626; color: #7f1d1d; }
+    .opt-btn.eliminated { opacity: 0.28; text-decoration: line-through; pointer-events: none; }
+    .q-feedback {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-align: center;
+      min-height: 20px;
+    }
+
+    /* Mystery Modal */
+    .mystery-card {
+      text-align: center;
+      background: linear-gradient(135deg, #312e81, #581c87);
+      color: #fff;
+    }
+    .mystery-spin {
+      font-size: 3rem;
+      margin: 10px 0;
+    }
+
+    /* Victory Modal */
+    .share-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 12px 0;
+    }
+    .share-btn {
+      border: none;
+      padding: 10px;
+      border-radius: 11px;
+      font-weight: 800;
+      font-size: 0.82rem;
+      cursor: pointer;
+      color: #fff;
+    }
+    .btn-wa { background: #16a34a; }
+    .btn-fb { background: #1877f2; }
+    .btn-copy {
+      grid-column: span 2;
+      background: #334155;
+    }
+    .score-preview {
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 0.78rem;
+      white-space: pre-line;
+      text-align: left;
+      color: #1e293b;
+      margin: 10px 0;
+    }
+
+    /* BELOW THE FOLD: EZOIC-READY SEO CONTENT & FOOTER */
+    .seo-section {
+      max-width: 820px;
+      margin: 26px auto 0;
+      padding: 28px 20px 10px;
+      background: #fff;
+      border-radius: 24px 24px 0 0;
+      box-shadow: 0 -4px 20px rgba(15,23,42,0.05);
+    }
+    .seo-section h1 {
+      font-size: 1.55rem;
+      color: #1e1b4b;
+      margin-bottom: 10px;
+    }
+    .seo-section h2 {
+      font-size: 1.2rem;
+      color: #4338ca;
+      margin: 22px 0 8px;
+    }
+    .seo-section p, .seo-section li {
+      color: #334155;
+      font-size: 0.96rem;
+      line-height: 1.65;
+      margin-bottom: 10px;
+    }
+    .seo-section ul { padding-left: 20px; margin-bottom: 14px; }
+    .faq-item {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      background: #f8fafc;
+    }
+    .faq-item strong { display: block; color: #0f172a; margin-bottom: 4px; }
+
+    .site-footer {
+      max-width: 820px;
+      margin: 0 auto;
+      background: #0f172a;
+      color: #cbd5e1;
+      padding: 24px 20px 34px;
+      text-align: center;
+      font-size: 0.88rem;
+    }
+    .footer-nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-bottom: 12px;
+    }
+    .footer-nav a {
+      color: #f8fafc;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .footer-nav a:hover { color: #fbbf24; text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- TOP ZERO-SCROLL GAME VIEWPORT -->
+  <section class="game-viewport" aria-label="GradeClash Trivia Board Game">
+    <header class="top-bar">
+      <div class="brand-block">
+        <span class="brand-logo">🎲 GradeClash</span>
+        <span class="mode-pill" id="headerModePill">Quick Match</span>
+      </div>
+      <div class="top-actions">
+        <span class="streak-chip" id="headerStreak" title="Daily Challenge Streak">🔥 0</span>
+        <button class="icon-btn" id="soundBtn" title="Toggle Sound" aria-label="Toggle Sound">🔊</button>
+        <button class="icon-btn" id="setupBtn" title="New Match / Settings" aria-label="New Match">⚙️</button>
+      </div>
+    </header>
+
+    <div class="players-row">
+      <div class="player-card p1 active" id="cardP1">
+        <div class="p-head">
+          <span class="p-name">🚀 <span id="p1Label">Kid (G5)</span></span>
+          <span class="p-pos" id="p1Pos">Tile 0/24</span>
+        </div>
+        <div class="p-badges">
+          <span class="lifeline-badge" id="p1Life">✂️ 50-50</span>
+          <span class="turn-dot" id="p1Turn" style="color:#2563eb;">Your Turn</span>
+        </div>
+      </div>
+
+      <div class="player-card p2" id="cardP2">
+        <div class="p-head">
+          <span class="p-name">👑 <span id="p2Label">Parent</span></span>
+          <span class="p-pos" id="p2Pos">Tile 0/24</span>
+        </div>
+        <div class="p-badges">
+          <span class="lifeline-badge" id="p2Life">✂️ 50-50</span>
+          <span class="turn-dot" id="p2Turn" style="color:#94a3b8;">Waiting</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="board-wrapper">
+      <div class="board-frame" id="board"></div>
+    </div>
+
+    <div class="control-dock">
+      <div class="status-text" id="statusText">
+        Kid's turn to roll!
+        <span class="status-sub" id="statusSub">Answer right to move forward on the spiral.</span>
+      </div>
+      <button class="roll-btn" id="rollBtn">
+        <span class="dice-face" id="diceFace">🎲</span> Roll
+      </button>
+    </div>
+  </section>
+
+  <!-- SETUP MODAL -->
+  <div class="modal-overlay open" id="setupModal">
+    <div class="modal-card">
+      <h2 style="text-align:center; font-size:1.35rem; color:#1e1b4b;">🎲 GradeClash</h2>
+      <p style="text-align:center; font-size:0.82rem; color:#64748b; margin-top:2px;">Kids vs. Parents Trivia • Spiral Board Race</p>
+
+      <div class="setup-tabs">
+        <button class="tab-btn active" id="tabQuick">🎲 Quick Match</button>
+        <button class="tab-btn" id="tabDaily">📅 Daily Challenge</button>
+      </div>
+
+      <div id="dailyInfoBox" class="daily-box" style="display:none;">
+        <div style="font-weight:900; color:#4338ca; font-size:0.95rem;" id="dailyEditionTitle">Daily Challenge #1</div>
+        <div style="font-size:0.78rem; color:#475569; margin:4px 0;">Same board & questions for everyone today!</div>
+        <div style="font-size:0.8rem; font-weight:800; color:#b45309;" id="dailyStreakInfo">🔥 Streak: 0 | 🏆 Best: 0</div>
+      </div>
+
+      <div class="form-group">
+        <span class="form-label">Play Mode</span>
+        <div class="pill-group">
+          <button class="choice-pill selected" data-play="pvp">👨‍👩‍👧 Pass & Play</button>
+          <button class="choice-pill" data-play="solo">🤖 Solo Mode</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <span class="form-label">Difficulty Style</span>
+        <div class="pill-group">
+          <button class="choice-pill selected" data-diff="fair">⚖️ Kids vs. Parents</button>
+          <button class="choice-pill" data-diff="same">🎯 Same Grade Battle</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="gradeSelect">Student Grade Level (US Curriculum)</label>
+        <select id="gradeSelect" class="grade-select">
+          <option value="1">Grade 1 (Ages 6–7)</option>
+          <option value="2">Grade 2 (Ages 7–8)</option>
+          <option value="3">Grade 3 (Ages 8–9)</option>
+          <option value="4">Grade 4 (Ages 9–10)</option>
+          <option value="5" selected>Grade 5 (Ages 10–11)</option>
+          <option value="6">Grade 6 (Ages 11–12)</option>
+          <option value="7">Grade 7 (Ages 12–13)</option>
+          <option value="8">Grade 8 (Ages 13–14)</option>
+        </select>
+      </div>
+
+      <button class="start-btn" id="startGameBtn">🚀 Start Match</button>
+    </div>
+  </div>
+
+  <!-- QUIZ MODAL -->
+  <div class="modal-overlay" id="quizModal">
+    <div class="modal-card">
+      <div class="quiz-top">
+        <span class="q-badge" id="qBadge">Grade 5 • Math</span>
+        <div class="q-controls">
+          <button class="lifeline-btn" id="use5050Btn">✂️ 50-50</button>
+          <span class="timer-pill" id="qTimer">15s</span>
+        </div>
+      </div>
+      <div class="q-text" id="qText">Question loads here...</div>
+      <div class="options-grid" id="optionsGrid"></div>
+      <div class="q-feedback" id="qFeedback"></div>
+    </div>
+  </div>
+
+  <!-- MYSTERY TILE MODAL -->
+  <div class="modal-overlay" id="mysteryModal">
+    <div class="modal-card mystery-card">
+      <div style="font-size:0.85rem; font-weight:800; letter-spacing:1px; color:#fde68a;">MYSTERY TILE 13!</div>
+      <div class="mystery-spin" id="mysteryEmoji">❓</div>
+      <h3 id="mysteryTitle" style="font-size:1.25rem; margin-bottom:6px;">Spinning Twist...</h3>
+      <p id="mysteryDesc" style="font-size:0.88rem; color:#e0e7ff;">Hold tight!</p>
+    </div>
+  </div>
+
+  <!-- VICTORY MODAL -->
+  <div class="modal-overlay" id="victoryModal">
+    <div class="modal-card" style="text-align:center;">
+      <div style="font-size:2.8rem;">🏆</div>
+      <h2 id="winTitle" style="font-size:1.45rem; color:#1e1b4b; margin:4px 0;">Kid Wins!</h2>
+      <p id="winSub" style="font-size:0.85rem; color:#475569;">Reached Tile 24 in 7 turns!</p>
+      <div id="winStreakBanner" style="display:none; background:#fef3c7; color:#b45309; font-weight:800; font-size:0.82rem; padding:6px 10px; border-radius:10px; margin-top:8px;"></div>
+
+      <div class="score-preview" id="scorePreview"></div>
+
+      <div class="share-grid">
+        <button class="share-btn btn-wa" id="shareWaBtn">💬 WhatsApp</button>
+        <button class="share-btn btn-fb" id="shareFbBtn">📘 Facebook</button>
+        <button class="share-btn btn-copy" id="copyScoreBtn">📋 Copy Score & Link</button>
+      </div>
+
+      <button class="start-btn" id="playAgainBtn">🔄 Play Again</button>
+    </div>
+  </div>
+
+  <!-- BELOW THE FOLD: EZOIC-READY SEO CONTENT -->
+  <article class="seo-section">
+    <h1>GradeClash: Free Kids vs. Parents Trivia Board Game (US Grades 1–8)</h1>
+    <p>Looking for a fast, fun, and screen-positive game for family night? <strong>GradeClash</strong> is a free online <strong>kids vs. parents trivia game</strong> built for US families and students in Grades 1 through 8. Designed to fit a 3-to-5-minute match, GradeClash combines classic spiral board-race excitement with real US school curriculum trivia in Math, Science, History, Geography, and English Language Arts.</p>
+
+    <h2>How to Play the Spiral Board Race</h2>
+    <ul>
+      <li><strong>Choose Your Mode:</strong> Play <strong>Pass & Play</strong> together on one phone or tablet, or pick <strong>Solo Mode</strong> to warm up against our built-in computer challenger.</li>
+      <li><strong>Fair-Play Handicap:</strong> In <em>Kids vs. Parents</em> mode, students answer questions tailored to their selected grade (Grades 1–8), while parents face tougher upper-grade and general-knowledge trivia.</li>
+      <li><strong>Roll, Answer & Hop:</strong> Roll the dice and answer within 15 seconds to hop inward along the 25-tile spiral from <strong>Start (0)</strong> to the <strong>Trophy Center (24)</strong>.</li>
+      <li><strong>Use Your ✂️ 50-50 Lifeline:</strong> Each player gets one 50-50 lifeline per match to eliminate two wrong choices on a tough question.</li>
+      <li><strong>Watch for Special Tiles:</strong> Land on <strong>⭐ Bonus Stars (6 & 17)</strong> to jump +2 tiles, dodge <strong>🍌 Slippery Detours (10 & 20)</strong> (-2 tiles), and trigger wild twists on the glowing <strong>❓ Mystery Tile (13)</strong>—including Rocket Boost, Push Back, or a full Position Swap!</li>
+    </ul>
+
+    <h2>Daily Challenge & Streak Tracking</h2>
+    <p>Switch to the <strong>📅 Daily Challenge</strong> tab to play today's fixed global board. Every player gets the exact same sequence of questions for that day. Win or finish to build your <strong>🔥 Daily Streak</strong> (saved safely in your browser with zero login required) and share your Wordle-style result card with friends and family.</p>
+
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item">
+      <strong>Is GradeClash completely free and safe for families?</strong>
+      Yes! GradeClash is 100% free to play in any mobile or desktop browser with no downloads, no sign-ups, and no personal accounts required.
+    </div>
+    <div class="faq-item">
+      <strong>What subjects are included in the Grade 1–8 trivia bank?</strong>
+      Questions cover US Elementary and Middle School Math, Earth & Life Science, US History & Geography, and English Grammar/Vocabulary.
+    </div>
+    <div class="faq-item">
+      <strong>How does Solo Mode work?</strong>
+      In Solo Mode, you race against our automated Computer Challenger, making it ideal for quick solo trivia warm-ups before challenging Mom or Dad.
+    </div>
+    <div class="faq-item">
+      <strong>What happens if two players land on the same tile?</strong>
+      If you land directly on your opponent's tile (anywhere except Start Tile 0), you knock them back 2 tiles!
+    </div>
+  </article>
+
+  <!-- FOOTER WITH DIRECT LINKS TO SEPARATE HTML PAGES -->
+  <footer class="site-footer">
+    <nav class="footer-nav" aria-label="Footer Navigation">
+      <a href="about.html">About Us</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <p>&copy; 2026 GradeClash.com — Free Kids vs. Parents Trivia Board Game. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // --- SPIRAL BOARD MAPPING (5x5 Inward Spiral: 0 top-left -> 24 center) ---
+    const SPIRAL_COORDS = [
+      [0,0],[0,1],[0,2],[0,3],[0,4],
+      [1,4],[2,4],[3,4],[4,4],
+      [4,3],[4,2],[4,1],[4,0],
+      [3,0],[2,0],[1,0],
+      [1,1],[1,2],[1,3],
+      [2,3],[3,3],[3,2],[3,1],
+      [2,1],[2,2]
+    ];
+
+    const BONUS_TILES = [6, 17];
+    const SLIP_TILES = [10, 20];
+    const MYSTERY_TILE = 13;
+    const SITE_URL = "https://gradeclash.com";
+
+    // --- US CURRICULUM QUESTION BANK (Grades 1-8 + Parent Tier) ---
+    const QUESTIONS = {
+      1: [
+        {s:"Math", q:"What is 7 + 5?", o:["11","12","13","10"], a:1},
+        {s:"Science", q:"Which part of a plant grows underground?", o:["Leaf","Flower","Root","Stem"], a:2},
+        {s:"ELA", q:"Which word rhymes with 'cat'?", o:["Dog","Hat","Sun","Cup"], a:1},
+        {s:"Math", q:"How many sides does a triangle have?", o:["2","3","4","5"], a:1},
+        {s:"Science", q:"What star gives Earth light and warmth?", o:["Moon","Mars","The Sun","Venus"], a:2},
+        {s:"Social", q:"How many days are in one week?", o:["5","6","7","8"], a:2},
+        {s:"Math", q:"What is 15 - 6?", o:["8","9","10","7"], a:1},
+        {s:"Science", q:"Which animal lays eggs?", o:["Dog","Chicken","Cat","Cow"], a:1}
+      ],
+      2: [
+        {s:"Math", q:"What is 24 + 13?", o:["35","36","37","38"], a:2},
+        {s:"Science", q:"What do caterpillars turn into?", o:["Bees","Butterflies","Frogs","Spiders"], a:1},
+        {s:"Social", q:"Which US holiday celebrates Independence Day?", o:["July 4th","May 1st","June 10th","Oct 31st"], a:0},
+        {s:"ELA", q:"Which word is a noun?", o:["Run","Happy","Apple","Quickly"], a:2},
+        {s:"Math", q:"How many pennies equal one quarter?", o:["10","20","25","50"], a:2},
+        {s:"Science", q:"Which state of matter is ice?", o:["Liquid","Gas","Solid","Plasma"], a:2},
+        {s:"Math", q:"What is 50 - 18?", o:["32","34","28","42"], a:0},
+        {s:"Social", q:"What is the capital city of the United States?", o:["New York","Washington, D.C.","Chicago","Boston"], a:1}
+      ],
+      3: [
+        {s:"Math", q:"What is 7 × 8?", o:["54","56","58","64"], a:1},
+        {s:"Science", q:"Which planet is known as the Red Planet?", o:["Venus","Jupiter","Mars","Saturn"], a:2},
+        {s:"ELA", q:"What is the plural of 'mouse'?", o:["Mouses","Mice","Mices","Mouse"], a:1},
+        {s:"Math", q:"What is 45 ÷ 5?", o:["7","8","9","10"], a:2},
+        {s:"Social", q:"How many states are in the United States?", o:["48","50","52","49"], a:1},
+        {s:"Science", q:"Animals that eat only plants are called what?", o:["Carnivores","Herbivores","Omnivores","Predators"], a:1},
+        {s:"Math", q:"Which fraction is equal to one half?", o:["2/3","2/4","3/5","1/4"], a:1},
+        {s:"Social", q:"Which ocean is on the US West Coast?", o:["Atlantic","Indian","Pacific","Arctic"], a:2}
+      ],
+      4: [
+        {s:"Math", q:"What is 12 × 11?", o:["121","132","144","122"], a:1},
+        {s:"Science", q:"What process do plants use to make food from sunlight?", o:["Digestion","Photosynthesis","Evaporation","Gravity"], a:1},
+        {s:"Social", q:"Who was the first President of the United States?", o:["Abraham Lincoln","Thomas Jefferson","George Washington","John Adams"], a:2},
+        {s:"Math", q:"How many degrees are in a right angle?", o:["45°","90°","180°","360°"], a:1},
+        {s:"ELA", q:"Which word is an adjective in: 'The tall tree swayed'?", o:["The","Tall","Tree","Swayed"], a:1},
+        {s:"Science", q:"What is the largest organ of the human body?", o:["Heart","Brain","Liver","Skin"], a:3},
+        {s:"Math", q:"What is the perimeter of a square with side length 9?", o:["18","27","36","81"], a:2},
+        {s:"Social", q:"Which US state is the largest by land area?", o:["Texas","California","Alaska","Montana"], a:2}
+      ],
+      5: [
+        {s:"Math", q:"What is 3/4 as a decimal?", o:["0.25","0.50","0.75","0.80"], a:2},
+        {s:"Science", q:"Which gas do humans breathe in to survive?", o:["Carbon Dioxide","Oxygen","Helium","Nitrogen"], a:1},
+        {s:"History", q:"In what year was the US Declaration of Independence signed?", o:["1776","1789","1812","1620"], a:0},
+        {s:"Math", q:"What is the volume of a box that is 3 × 4 × 5?", o:["12","45","60","75"], a:2},
+        {s:"ELA", q:"What is a word with the opposite meaning called?", o:["Synonym","Antonym","Homophone","Prefix"], a:1},
+        {s:"Science", q:"Which planet has the most prominent ring system?", o:["Mars","Mercury","Saturn","Neptune"], a:2},
+        {s:"Geography", q:"What is the longest river in the United States?", o:["Colorado","Missouri","Hudson","Rio Grande"], a:1},
+        {s:"Math", q:"Simplify: 8 + 2 × 5", o:["50","18","20","15"], a:1}
+      ],
+      6: [
+        {s:"Math", q:"What is 25% of 80?", o:["15","20","25","30"], a:1},
+        {s:"Science", q:"What is the powerhouse of the cell?", o:["Nucleus","Ribosome","Mitochondria","Vacuole"], a:2},
+        {s:"History", q:"Which ancient civilization built the pyramids of Giza?", o:["Romans","Greeks","Egyptians","Mayans"], a:2},
+        {s:"Math", q:"Solve for x: 3x = 27", o:["6","8","9","12"], a:2},
+        {s:"Geography", q:"Which continent has the most countries?", o:["Asia","Europe","Africa","South America"], a:2},
+        {s:"Science", q:"At what temperature does water boil in Celsius?", o:["50°C","90°C","100°C","212°C"], a:2},
+        {s:"Math", q:"What is the greatest common factor (GCF) of 18 and 24?", o:["3","6","9","12"], a:1},
+        {s:"ELA", q:"'The wind whispered through the trees' is an example of:", o:["Simile","Personification","Hyperbole","Alliteration"], a:1}
+      ],
+      7: [
+        {s:"Math", q:"What is (-6) × (-7)?", o:["-42","42","-13","13"], a:1},
+        {s:"Science", q:"What is the chemical symbol for Gold?", o:["Gd","Go","Ag","Au"], a:3},
+        {s:"History", q:"Which document begins with 'We the People'?", o:["Bill of Rights","US Constitution","Magna Carta","Gettysburg Address"], a:1},
+        {s:"Math", q:"The sum of angles inside any triangle is always:", o:["90°","180°","270°","360°"], a:1},
+        {s:"Science", q:"Which blood cells help fight infections?", o:["Red blood cells","White blood cells","Platelets","Plasma"], a:1},
+        {s:"Math", q:"Solve: 2x + 5 = 19", o:["6","7","8","12"], a:1},
+        {s:"Geography", q:"What is the capital of Canada?", o:["Toronto","Vancouver","Ottawa","Montreal"], a:2},
+        {s:"ELA", q:"What does the Greek root 'bio' mean?", o:["Earth","Life","Water","Time"], a:1}
+      ],
+      8: [
+        {s:"Math", q:"What is the square root of 144?", o:["11","12","13","14"], a:1},
+        {s:"Science", q:"Newton's Second Law states Force equals Mass times:", o:["Velocity","Speed","Acceleration","Gravity"], a:2},
+        {s:"History", q:"Who issued the Emancipation Proclamation in 1863?", o:["Ulysses S. Grant","Abraham Lincoln","Andrew Jackson","Theodore Roosevelt"], a:1},
+        {s:"Math", q:"In a right triangle with legs 3 and 4, what is the hypotenuse?", o:["5","6","7","8"], a:0},
+        {s:"Science", q:"Which element has the atomic number 1?", o:["Helium","Carbon","Oxygen","Hydrogen"], a:3},
+        {s:"Math", q:"What is 2⁵ (2 to the 5th power)?", o:["10","16","32","64"], a:2},
+        {s:"History", q:"The Louisiana Purchase doubled the US in which year?", o:["1776","1803","1849","1865"], a:1},
+        {s:"Science", q:"What type of rock is formed from cooled magma?", o:["Sedimentary","Metamorphic","Igneous","Limestone"], a:2}
+      ],
+      parent: [
+        {s:"Science", q:"Which planet in our solar system rotates on its side?", o:["Neptune","Uranus","Saturn","Venus"], a:1},
+        {s:"History", q:"Which US President served the only non-consecutive terms?", o:["Grover Cleveland","Woodrow Wilson","James Monroe","John Adams"], a:0},
+        {s:"Math", q:"What is the only even prime number?", o:["0","2","4","6"], a:1},
+        {s:"Geography", q:"Which US state has the longest coastline?", o:["California","Florida","Alaska","Hawaii"], a:2},
+        {s:"Science", q:"What is the hardest naturally occurring mineral on Earth?", o:["Quartz","Titanium","Diamond","Topaz"], a:2},
+        {s:"ELA", q:"What is a word that reads the same forward and backward?", o:["Anagram","Palindrome","Oxymoron","Acronym"], a:1},
+        {s:"History", q:"In what year did humans first land on the Moon?", o:["1965","1967","1969","1971"], a:2},
+        {s:"Science", q:"How many bones are in the adult human body?", o:["186","206","226","256"], a:1},
+        {s:"Geography", q:"Which river flows through the Grand Canyon?", o:["Mississippi","Colorado","Rio Grande","Columbia"], a:1},
+        {s:"Math", q:"What is 15% of 200?", o:["20","25","30","35"], a:2},
+        {s:"Science", q:"Which vitamin is primarily produced when skin is exposed to sunlight?", o:["Vitamin A","Vitamin B12","Vitamin C","Vitamin D"], a:3},
+        {s:"History", q:"Which amendment to the US Constitution granted women the right to vote?", o:["15th","18th","19th","21st"], a:2}
+      ]
+    };
+
+    // --- SOUND ENGINE (Web Audio API) ---
+    let soundEnabled = true;
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let actx = null;
+    function playTone(freq, dur=0.1, type="sine", vol=0.12) {
+      if (!soundEnabled) return;
+      try {
+        if (!actx) actx = new AudioCtx();
+        const o = actx.createOscillator();
+        const g = actx.createGain();
+        o.type = type;
+        o.frequency.value = freq;
+        g.gain.setValueAtTime(vol, actx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
+        o.connect(g); g.connect(actx.destination);
+        o.start(); o.stop(actx.currentTime + dur);
+      } catch(e){}
+    }
+    const sfx = {
+      hop: () => playTone(520, 0.08, "triangle", 0.1),
+      correct: () => { playTone(523,0.1); setTimeout(()=>playTone(659,0.12),90); setTimeout(()=>playTone(784,0.18),180); },
+      wrong: () => { playTone(220,0.18,"sawtooth",0.09); setTimeout(()=>playTone(170,0.22,"sawtooth",0.09),140); },
+      slice: () => playTone(920, 0.09, "square", 0.08),
+      win: () => [523,659,784,1046].forEach((f,i)=>setTimeout(()=>playTone(f,0.22,"triangle",0.14), i*110))
+    };
+
+    // --- DAILY CHALLENGE SEEDING & STREAK ---
+    function getTodayKey() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+    function getDailyNumber() {
+      const start = new Date(2026, 0, 1);
+      const now = new Date();
+      return Math.max(1, Math.floor((now - start) / 86400000) + 1);
+    }
+    function seededRandom(seed) {
+      let x = Math.sin(seed++) * 10000;
+      return x - Math.floor(x);
+    }
+    function getStreakData() {
+      try {
+        return JSON.parse(localStorage.getItem("gradeclash_streak_v1")) || { streak: 0, best: 0, lastDate: "" };
+      } catch(e) { return { streak: 0, best: 0, lastDate: "" }; }
+    }
+    function recordDailyWin() {
+      const data = getStreakData();
+      const today = getTodayKey();
+      if (data.lastDate !== today) {
+        const yest = new Date(Date.now() - 86400000);
+        const yKey = `${yest.getFullYear()}-${String(yest.getMonth()+1).padStart(2,'0')}-${String(yest.getDate()).padStart(2,'0')}`;
+        data.streak = (data.lastDate === yKey) ? data.streak + 1 : 1;
+        data.best = Math.max(data.best, data.streak);
+        data.lastDate = today;
+        try { localStorage.setItem("gradeclash_streak_v1", JSON.stringify(data)); } catch(e){}
+      }
+      updateStreakUI();
+      return data;
+    }
+
+    // --- GAME STATE ---
+    let state = {
+      isDaily: false,
+      playMode: "pvp", // pvp | solo
+      diffMode: "fair", // fair | same
+      grade: 5,
+      turn: 0, // 0 = P1, 1 = P2
+      pos: [0, 0],
+      lifeline: [true, true],
+      turnsCount: [0, 0],
+      correctCount: [0, 0],
+      busy: false,
+      pendingRoll: 0,
+      dailySeed: 1,
+      usedQ: new Set(),
+      timerId: null
+    };
+
+    // --- UI REFS ---
+    const boardEl = document.getElementById("board");
+    const rollBtn = document.getElementById("rollBtn");
+    const diceFace = document.getElementById("diceFace");
+    const statusText = document.getElementById("statusText");
+    const setupModal = document.getElementById("setupModal");
+    const quizModal = document.getElementById("quizModal");
+    const mysteryModal = document.getElementById("mysteryModal");
+    const victoryModal = document.getElementById("victoryModal");
+
+    function updateStreakUI() {
+      const d = getStreakData();
+      const done = d.lastDate === getTodayKey();
+      document.getElementById("headerStreak").textContent = `🔥 ${d.streak}`;
+      document.getElementById("dailyEditionTitle").textContent = `Daily Challenge #${getDailyNumber()}${done ? " ✅ Completed" : ""}`;
+      document.getElementById("dailyStreakInfo").textContent = `🔥 Streak: ${d.streak} | 🏆 Best: ${d.best}`;
+    }
+
+    // --- BUILD 5x5 SPIRAL BOARD ---
+    function renderBoard() {
+      boardEl.innerHTML = "";
+      const gridCells = Array.from({length: 5}, () => Array(5).fill(null));
+      SPIRAL_COORDS.forEach(([r, c], idx) => { gridCells[r][c] = idx; });
+
+      for (let r = 0; r < 5; r++) {
+        for (let c = 0; c < 5; c++) {
+          const idx = gridCells[r][c];
+          const tile = document.createElement("div");
+          tile.className = "tile";
+          tile.id = `tile-${idx}`;
+          let icon = "", tag = "";
+          if (idx === 0) { tile.classList.add("tile-start"); icon = "🚩"; tag = "START"; }
+          else if (idx === 24) { tile.classList.add("tile-finish"); icon = "🏆"; tag = "WIN"; }
+          else if (BONUS_TILES.includes(idx)) { tile.classList.add("tile-bonus"); icon = "⭐"; tag = "+2"; }
+          else if (SLIP_TILES.includes(idx)) { tile.classList.add("tile-slip"); icon = "🍌"; tag = "-2"; }
+          else if (idx === MYSTERY_TILE) { tile.classList.add("tile-mystery"); icon = "❓"; tag = "MYSTERY"; }
+
+          tile.innerHTML = `
+            <span class="tile-num">${idx}</span>
+            ${icon ? `<span class="tile-icon">${icon}</span>` : ""}
+            ${tag ? `<span class="tile-tag">${tag}</span>` : ""}
+            <div class="tokens-layer" id="tokens-${idx}"></div>
+          `;
+          boardEl.appendChild(tile);
+        }
+      }
+      renderTokens();
+    }
+
+    function renderTokens(hopPlayer = -1) {
+      for (let i = 0; i <= 24; i++) {
+        const layer = document.getElementById(`tokens-${i}`);
+        if (layer) layer.innerHTML = "";
+      }
+      [0, 1].forEach(p => {
+        const layer = document.getElementById(`tokens-${state.pos[p]}`);
+        if (layer) {
+          const t = document.createElement("div");
+          t.className = `token ${p===0 ? "t1" : "t2"}${hopPlayer===p ? " hop" : ""}`;
+          t.textContent = p === 0 ? "🚀" : "👑";
+          layer.appendChild(t);
+        }
+      });
+    }
+
+    function updateHUD() {
+      const p1Name = `Kid (G${state.grade})`;
+      const p2Name = state.playMode === "solo" ? "Computer" : (state.diffMode === "fair" ? "Parent" : `Player 2 (G${state.grade})`);
+      document.getElementById("p1Label").textContent = p1Name;
+      document.getElementById("p2Label").textContent = p2Name;
+      document.getElementById("p1Pos").textContent = `Tile ${state.pos[0]}/24`;
+      document.getElementById("p2Pos").textContent = `Tile ${state.pos[1]}/24`;
+
+      const l1 = document.getElementById("p1Life");
+      const l2 = document.getElementById("p2Life");
+      l1.className = `lifeline-badge${state.lifeline[0] ? "" : " used"}`;
+      l2.className = `lifeline-badge${state.lifeline[1] ? "" : " used"}`;
+
+      document.getElementById("cardP1").classList.toggle("active", state.turn === 0);
+      document.getElementById("cardP2").classList.toggle("active", state.turn === 1);
+      document.getElementById("p1Turn").textContent = state.turn === 0 ? "Your Turn" : "Waiting";
+      document.getElementById("p1Turn").style.color = state.turn === 0 ? "#2563eb" : "#94a3b8";
+      document.getElementById("p2Turn").textContent = state.turn === 1 ? (state.playMode==="solo" ? "Thinking..." : "Your Turn") : "Waiting";
+      document.getElementById("p2Turn").style.color = state.turn === 1 ? "#e11d48" : "#94a3b8";
+
+      document.getElementById("headerModePill").textContent = state.isDaily ? `Daily #${getDailyNumber()}` : (state.playMode==="solo" ? "Solo Mode" : "Quick Match");
+    }
+
+    function setStatus(main, sub="") {
+      statusText.innerHTML = `${main}<span class="status-sub">${sub}</span>`;
+    }
+
+    // --- QUESTION PICKER ---
+    function pickQuestion(playerIdx) {
+      const poolKey = (playerIdx === 1 && state.diffMode === "fair") ? "parent" : state.grade;
+      const pool = QUESTIONS[poolKey] || QUESTIONS[5];
+      let available = pool.map((q, i) => ({...q, id: `${poolKey}-${i}`})).filter(q => !state.usedQ.has(q.id));
+      if (available.length === 0) {
+        pool.forEach((_, i) => state.usedQ.delete(`${poolKey}-${i}`));
+        available = pool.map((q, i) => ({...q, id: `${poolKey}-${i}`}));
+      }
+      let idx;
+      if (state.isDaily) {
+        idx = Math.floor(seededRandom(state.dailySeed++) * available.length);
+      } else {
+        idx = Math.floor(Math.random() * available.length);
+      }
+      const chosen = available[idx];
+      state.usedQ.add(chosen.id);
+      return { ...chosen, tierLabel: poolKey === "parent" ? "Parent Tier" : `Grade ${state.grade}` };
+    }
+
+    // --- ROLL DICE ---
+    function handleRoll() {
+      if (state.busy) return;
+      state.busy = true;
+      rollBtn.disabled = true;
+      diceFace.classList.add("rolling");
+
+      const faces = ["⚀","⚁","⚂","⚃","⚄","⚅"];
+      const rollVal = state.isDaily
+        ? Math.floor(seededRandom(state.dailySeed++) * 6) + 1
+        : Math.floor(Math.random() * 6) + 1;
+
+      setTimeout(() => {
+        diceFace.classList.remove("rolling");
+        diceFace.textContent = faces[rollVal - 1];
+        state.pendingRoll = rollVal;
+        state.turnsCount[state.turn]++;
+
+        if (state.playMode === "solo" && state.turn === 1) {
+          // Computer Challenger turn
+          setStatus(`🤖 Computer rolled a ${rollVal}!`, "Answering trivia...");
+          setTimeout(() => {
+            const aiRight = Math.random() < 0.72;
+            if (aiRight) {
+              state.correctCount[1]++;
+              sfx.correct();
+              setStatus(`🤖 Computer got it right!`, `Moving +${rollVal} tiles...`);
+              animateMove(1, rollVal);
+            } else {
+              sfx.wrong();
+              setStatus(`🤖 Computer missed the question!`, "Your turn next!");
+              setTimeout(nextTurn, 900);
+            }
+          }, 950);
+        } else {
+          openQuiz(rollVal);
+        }
+      }, 480);
+    }
+
+    // --- QUIZ MODAL ---
+    function openQuiz(rollVal) {
+      const q = pickQuestion(state.turn);
+      const pLabel = state.turn === 0 ? `Kid (G${state.grade})` : (state.diffMode === "fair" ? "Parent" : `Player 2`);
+      document.getElementById("qBadge").textContent = `${pLabel} • ${q.tierLabel} • ${q.s} (+${rollVal})`;
+      document.getElementById("qText").textContent = q.q;
+      document.getElementById("qFeedback").textContent = "";
+
+      const lifeBtn = document.getElementById("use5050Btn");
+      lifeBtn.disabled = !state.lifeline[state.turn];
+      lifeBtn.onclick = () => {
+        if (!state.lifeline[state.turn]) return;
+        state.lifeline[state.turn] = false;
+        lifeBtn.disabled = true;
+        sfx.slice();
+        updateHUD();
+        const btns = Array.from(document.querySelectorAll(".opt-btn"));
+        const wrongIndices = [0,1,2,3].filter(i => i !== q.a).sort(() => Math.random() - 0.5).slice(0, 2);
+        wrongIndices.forEach(i => btns[i].classList.add("eliminated"));
+      };
+
+      const grid = document.getElementById("optionsGrid");
+      grid.innerHTML = "";
+      let answered = false;
+
+      q.o.forEach((optText, idx) => {
+        const b = document.createElement("button");
+        b.className = "opt-btn";
+        b.textContent = `${["A","B","C","D"][idx]}. ${optText}`;
+        b.onclick = () => {
+          if (answered) return;
+          answered = true;
+          clearInterval(state.timerId);
+          finishQuiz(idx === q.a, q.a, idx, rollVal);
+        };
+        grid.appendChild(b);
+      });
+
+      let secs = 15;
+      const timerEl = document.getElementById("qTimer");
+      timerEl.textContent = `${secs}s`;
+      clearInterval(state.timerId);
+      state.timerId = setInterval(() => {
+        secs--;
+        timerEl.textContent = `${secs}s`;
+        if (secs <= 0 && !answered) {
+          answered = true;
+          clearInterval(state.timerId);
+          finishQuiz(false, q.a, -1, rollVal);
+        }
+      }, 1000);
+
+      quizModal.classList.add("open");
+    }
+
+    function finishQuiz(isCorrect, correctIdx, chosenIdx, rollVal) {
+      const btns = document.querySelectorAll(".opt-btn");
+      btns.forEach(b => b.disabled = true);
+      if (btns[correctIdx]) btns[correctIdx].classList.add("correct");
+      if (!isCorrect && chosenIdx >= 0 && btns[chosenIdx]) btns[chosenIdx].classList.add("wrong");
+
+      const fb = document.getElementById("qFeedback");
+      if (isCorrect) {
+        state.correctCount[state.turn]++;
+        sfx.correct();
+        fb.style.color = "#15803d";
+        fb.textContent = `✅ Correct! Moving +${rollVal} tiles!`;
+      } else {
+        sfx.wrong();
+        fb.style.color = "#b91c1c";
+        fb.textContent = chosenIdx === -1 ? "⏰ Time's up! No movement." : "❌ Not quite! Stay on current tile.";
+      }
+
+      setTimeout(() => {
+        quizModal.classList.remove("open");
+        if (isCorrect) animateMove(state.turn, rollVal);
+        else nextTurn();
+      }, 950);
+    }
+
+    // --- STEP-BY-STEP HOP ANIMATION & SPECIAL TILES ---
+    function animateMove(playerIdx, steps) {
+      let remaining = Math.abs(steps);
+      const dir = steps >= 0 ? 1 : -1;
+
+      function step() {
+        if (remaining <= 0) {
+          checkSpecialTile(playerIdx);
+          return;
+        }
+        const nextPos = Math.max(0, Math.min(24, state.pos[playerIdx] + dir));
+        state.pos[playerIdx] = nextPos;
+        sfx.hop();
+        renderTokens(playerIdx);
+        updateHUD();
+        remaining--;
+        if (nextPos === 24 && dir > 0) {
+          checkSpecialTile(playerIdx);
+          return;
+        }
+        setTimeout(step, 165);
+      }
+      step();
+    }
+
+    function triggerShake() {
+      boardEl.classList.remove("shake");
+      void boardEl.offsetWidth;
+      boardEl.classList.add("shake");
+    }
+
+    function checkSpecialTile(playerIdx) {
+      const pos = state.pos[playerIdx];
+      const opp = 1 - playerIdx;
+      const tileEl = document.getElementById(`tile-${pos}`);
+      if (tileEl) {
+        tileEl.classList.add("glow");
+        setTimeout(() => tileEl.classList.remove("glow"), 700);
+      }
+
+      // 1. Check Win
+      if (pos >= 24) {
+        showVictory(playerIdx);
+        return;
+      }
+
+      // 2. Knockout Rule
+      if (pos > 0 && state.pos[opp] === pos) {
+        state.pos[opp] = Math.max(0, state.pos[opp] - 2);
+        triggerShake();
+        sfx.wrong();
+        renderTokens();
+        updateHUD();
+        setStatus("💥 KNOCKOUT!", "Opponent bounced back 2 tiles!");
+      }
+
+      // 3. Bonus Star
+      if (BONUS_TILES.includes(pos)) {
+        sfx.correct();
+        setStatus("⭐ Bonus Star!", "Jumping +2 extra tiles!");
+        setTimeout(() => animateMove(playerIdx, 2), 450);
+        return;
+      }
+
+      // 4. Slippery Detour
+      if (SLIP_TILES.includes(pos)) {
+        triggerShake();
+        sfx.wrong();
+        setStatus("🍌 Slippery Detour!", "Sliding back 2 tiles!");
+        setTimeout(() => animateMove(playerIdx, -2), 500);
+        return;
+      }
+
+      // 5. Mystery Tile (Tile 13)
+      if (pos === MYSTERY_TILE) {
+        triggerMystery(playerIdx);
+        return;
+      }
+
+      setTimeout(nextTurn, 380);
+    }
+
+    function triggerMystery(playerIdx) {
+      const opp = 1 - playerIdx;
+      const twists = [
+        { emoji: "🚀", title: "Rocket Boost!", desc: "Zoom forward +2 bonus tiles!", act: () => animateMove(playerIdx, 2) },
+        { emoji: "🌪️", title: "Wind Gust!", desc: "Opponent pushed back -2 tiles!", act: () => {
+          state.pos[opp] = Math.max(0, state.pos[opp] - 2);
+          triggerShake(); renderTokens(); updateHUD(); setTimeout(nextTurn, 400);
+        }},
+        { emoji: "🔄", title: "Position Swap!", desc: "Both players trade places on the board!", act: () => {
+          const tmp = state.pos[playerIdx];
+          state.pos[playerIdx] = state.pos[opp];
+          state.pos[opp] = tmp;
+          triggerShake(); renderTokens(); updateHUD(); setTimeout(nextTurn, 400);
+        }}
+      ];
+      const pick = twists[Math.floor(Math.random() * twists.length)];
+      document.getElementById("mysteryEmoji").textContent = "❓";
+      document.getElementById("mysteryTitle").textContent = "Spinning Mystery Twist...";
+      document.getElementById("mysteryDesc").textContent = "What will Tile 13 reveal?";
+      mysteryModal.classList.add("open");
+      sfx.slice();
+
+      setTimeout(() => {
+        document.getElementById("mysteryEmoji").textContent = pick.emoji;
+        document.getElementById("mysteryTitle").textContent = pick.title;
+        document.getElementById("mysteryDesc").textContent = pick.desc;
+        sfx.correct();
+        setTimeout(() => {
+          mysteryModal.classList.remove("open");
+          pick.act();
+        }, 1250);
+      }, 750);
+    }
+
+    function nextTurn() {
+      state.turn = 1 - state.turn;
+      state.busy = false;
+      updateHUD();
+      const name = state.turn === 0 ? `Kid (G${state.grade})` : (state.playMode === "solo" ? "Computer" : (state.diffMode === "fair" ? "Parent" : "Player 2"));
+      setStatus(`${name}'s turn!`, "Roll the dice to answer a trivia question.");
+
+      if (state.playMode === "solo" && state.turn === 1) {
+        rollBtn.disabled = true;
+        setTimeout(handleRoll, 650);
+      } else {
+        rollBtn.disabled = false;
+      }
+    }
+
+    // --- VICTORY & SOCIAL SHARE ---
+    let latestShareText = "";
+    function showVictory(winnerIdx) {
+      sfx.win();
+      const winnerName = winnerIdx === 0 ? `Kid (Grade ${state.grade})` : (state.playMode === "solo" ? "Computer" : (state.diffMode === "fair" ? "Parent" : "Player 2"));
+      document.getElementById("winTitle").textContent = `🏆 ${winnerName} Wins!`;
+      document.getElementById("winSub").textContent = `Reached Tile 24 in ${state.turnsCount[winnerIdx]} turns (${state.correctCount[winnerIdx]} correct)!`;
+
+      const streakBanner = document.getElementById("winStreakBanner");
+      if (state.isDaily) {
+        const sData = recordDailyWin();
+        streakBanner.style.display = "block";
+        streakBanner.textContent = `🔥 Daily Challenge #${getDailyNumber()} Saved! Streak: ${sData.streak} Day${sData.streak>1?"s":""}`;
+      } else {
+        streakBanner.style.display = "none";
+      }
+
+      const titleLine = state.isDaily
+        ? `🎲 GradeClash Daily #${getDailyNumber()}`
+        : `🎲 GradeClash: Kids vs. Parents (Grade ${state.grade})`;
+      latestShareText = `${titleLine}
+🏆 Winner: ${winnerName} in ${state.turnsCount[winnerIdx]} turns!
+🚀 Kid: Tile ${state.pos[0]}/24 | 👑 Opponent: Tile ${state.pos[1]}/24
+Can you beat our score? Play free: ${SITE_URL}`;
+
+      document.getElementById("scorePreview").textContent = latestShareText;
+      victoryModal.classList.add("open");
+    }
+
+    document.getElementById("shareWaBtn").onclick = () => {
+      window.open(`https://wa.me/?text=${encodeURIComponent(latestShareText)}`, "_blank");
+    };
+    document.getElementById("shareFbBtn").onclick = () => {
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE_URL)}&quote=${encodeURIComponent(latestShareText)}`, "_blank");
+    };
+    document.getElementById("copyScoreBtn").onclick = () => {
+      navigator.clipboard?.writeText(latestShareText).then(() => {
+        const btn = document.getElementById("copyScoreBtn");
+        btn.textContent = "✅ Copied!";
+        setTimeout(() => btn.textContent = "📋 Copy Score & Link", 1800);
+      });
+    };
+
+    // --- SETUP MODAL CONTROLS ---
+    document.getElementById("tabQuick").onclick = () => {
+      state.isDaily = false;
+      document.getElementById("tabQuick").classList.add("active");
+      document.getElementById("tabDaily").classList.remove("active");
+      document.getElementById("dailyInfoBox").style.display = "none";
+    };
+    document.getElementById("tabDaily").onclick = () => {
+      state.isDaily = true;
+      document.getElementById("tabDaily").classList.add("active");
+      document.getElementById("tabQuick").classList.remove("active");
+      document.getElementById("dailyInfoBox").style.display = "block";
+      updateStreakUI();
+    };
+
+    document.querySelectorAll("[data-play]").forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll("[data-play]").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        state.playMode = btn.dataset.play;
+      };
+    });
+    document.querySelectorAll("[data-diff]").forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll("[data-diff]").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        state.diffMode = btn.dataset.diff;
+      };
+    });
+
+    function startNewMatch() {
+      state.grade = parseInt(document.getElementById("gradeSelect").value, 10);
+      state.turn = 0;
+      state.pos = [0, 0];
+      state.lifeline = [true, true];
+      state.turnsCount = [0, 0];
+      state.correctCount = [0, 0];
+      state.busy = false;
+      state.usedQ.clear();
+      state.dailySeed = getDailyNumber() * 137 + state.grade * 19;
+
+      setupModal.classList.remove("open");
+      victoryModal.classList.remove("open");
+      renderBoard();
+      updateHUD();
+      rollBtn.disabled = false;
+      setStatus(`Kid (G${state.grade})'s turn!`, "Roll the dice to start the spiral race.");
+    }
+
+    document.getElementById("startGameBtn").onclick = startNewMatch;
+    document.getElementById("playAgainBtn").onclick = () => {
+      victoryModal.classList.remove("open");
+      setupModal.classList.add("open");
+      updateStreakUI();
+    };
+    document.getElementById("setupBtn").onclick = () => {
+      setupModal.classList.add("open");
+      updateStreakUI();
+    };
+    document.getElementById("soundBtn").onclick = (e) => {
+      soundEnabled = !soundEnabled;
+      e.target.textContent = soundEnabled ? "🔊" : "🔇";
+    };
+    rollBtn.onclick = handleRoll;
+
+    // Init
+    updateStreakUI();
+    renderBoard();
+    updateHUD();
+  </script>
+</body>
+</html>
