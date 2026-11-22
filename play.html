@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Play GradeClash — Kids vs. Parents Spiral Board Trivia</title>
+  <meta name="description" content="Play GradeClash live! Roll your dice and race to Tile 24 in this free Kids vs. Parents US Grade 1–8 trivia board game." />
+  <link rel="canonical" href="https://gradeclash.com/play.html" />
+  <style>
+    :root {
+      --bg-1: #eef2ff;
+      --bg-2: #fdf4ff;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --p1: #2563eb;
+      --p2: #e11d48;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%);
+      color: var(--ink);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .game-shell {
+      width: 100%;
+      max-width: 480px;
+      padding: 8px 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255,255,255,0.95);
+      padding: 6px 10px;
+      border-radius: 13px;
+      box-shadow: 0 3px 10px rgba(15,23,42,0.06);
+    }
+    .home-link {
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #4f46e5;
+      background: #eef2ff;
+      padding: 5px 10px;
+      border-radius: 9px;
+    }
+    .mode-pill {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #ede9fe;
+      color: #5b21b6;
+    }
+    .top-right { display: flex; align-items: center; gap: 6px; }
+    .streak-chip {
+      font-size: 0.74rem;
+      font-weight: 800;
+      background: #fef3c7;
+      color: #b45309;
+      padding: 4px 8px;
+      border-radius: 9px;
+    }
+    .icon-btn {
+      background: #f1f5f9;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .player-dock {
+      background: #fff;
+      border-radius: 16px;
+      padding: 8px 11px;
+      border: 2.5px solid transparent;
+      box-shadow: 0 4px 12px rgba(15,23,42,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+    .player-dock.p2.active {
+      border-color: var(--p2);
+      background: #fff1f2;
+      box-shadow: 0 4px 16px rgba(225,29,72,0.2);
+    }
+    .player-dock.p1.active {
+      border-color: var(--p1);
+      background: #eff6ff;
+      box-shadow: 0 4px 16px rgba(37,99,235,0.2);
+    }
+    .dock-info { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+    .dock-row-1 { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .p-name { font-size: 0.9rem; font-weight: 900; color: #0f172a; }
+    .score-pill {
+      font-size: 0.72rem;
+      font-weight: 800;
+      background: #fef3c7;
+      color: #92400e;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+    .dock-row-2 { display: flex; align-items: center; gap: 8px; font-size: 0.72rem; font-weight: 700; color: var(--muted); }
+    .lifeline-badge {
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: #dcfce7;
+      color: #166534;
+    }
+    .lifeline-badge.used { background: #f1f5f9; color: #94a3b8; text-decoration: line-through; }
+
+    .roll-btn {
+      border: none;
+      padding: 10px 15px;
+      border-radius: 13px;
+      font-size: 0.9rem;
+      font-weight: 900;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: transform 0.1s, opacity 0.2s;
+    }
+    .roll-btn.p2-btn { background: linear-gradient(180deg, #e11d48 0%, #be123c 100%); box-shadow: 0 4px 0 #881337; }
+    .roll-btn.p1-btn { background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%); box-shadow: 0 4px 0 #1e3a8a; }
+    .roll-btn:active:not(:disabled) { transform: translateY(3px); box-shadow: none; }
+    .roll-btn:disabled { opacity: 0.38; cursor: not-allowed; box-shadow: none; }
+
+    .dice-face { font-size: 1.15rem; display: inline-block; }
+    .dice-face.rolling { animation: spinDice 0.35s linear infinite; }
+    @keyframes spinDice { 100% { transform: rotate(360deg); } }
+
+    .status-banner {
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #312e81;
+      background: rgba(255,255,255,0.88);
+      padding: 5px 10px;
+      border-radius: 10px;
+      border: 1px solid #e0e7ff;
+    }
+
+    .board-frame {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #1e1b4b;
+      padding: 8px;
+      border-radius: 20px;
+      box-shadow: 0 10px 26px rgba(30,27,75,0.24), inset 0 2px 0 rgba(255,255,255,0.15);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 6px;
+      position: relative;
+    }
+    .board-frame.shake { animation: boardShake 0.42s ease; }
+    @keyframes boardShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px) rotate(-1deg); }
+      40% { transform: translateX(6px) rotate(1deg); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    .tile {
+      position: relative;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 4px 0 #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      transition: transform 0.15s;
+    }
+    .tile.tile-math { background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%); box-shadow: 0 4px 0 #bfdbfe; }
+    .tile.tile-sci  { background: linear-gradient(180deg, #ffffff 0%, #ecfdf5 100%); box-shadow: 0 4px 0 #a7f3d0; }
+    .tile.tile-hist { background: linear-gradient(180deg, #ffffff 0%, #fffbeb 100%); box-shadow: 0 4px 0 #fde68a; }
+    .tile.tile-ela  { background: linear-gradient(180deg, #ffffff 0%, #fdf2f8 100%); box-shadow: 0 4px 0 #fbcfe8; }
+    .tile.tile-start { background: linear-gradient(180deg, #dbeafe 0%, #93c5fd 100%); box-shadow: 0 4px 0 #3b82f6; }
+    .tile.tile-finish { background: linear-gradient(180deg, #fef08a 0%, #f59e0b 100%); box-shadow: 0 4px 0 #b45309; }
+    .tile.tile-bonus { background: linear-gradient(180deg, #dcfce7 0%, #86efac 100%); box-shadow: 0 4px 0 #16a34a; }
+    .tile.tile-slip { background: linear-gradient(180deg, #fee2e2 0%, #fca5a5 100%); box-shadow: 0 4px 0 #dc2626; }
+    .tile.tile-mystery {
+      background: linear-gradient(180deg, #ede9fe 0%, #c4b5fd 100%);
+      box-shadow: 0 4px 0 #7c3aed;
+      animation: mysteryPulse 2.2s infinite;
+    }
+    @keyframes mysteryPulse {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.1); box-shadow: 0 4px 0 #7c3aed, 0 0 12px rgba(167,139,250,0.85); }
+    }
+    .tile.glow { transform: scale(1.06); z-index: 3; box-shadow: 0 0 16px rgba(251,191,36,0.95), 0 4px 0 #d97706; }
+
+    .tile-num { position: absolute; top: 3px; left: 5px; font-size: 0.6rem; font-weight: 800; color: rgba(15,23,42,0.52); }
+    .tile-icon { font-size: 1.15rem; line-height: 1; }
+    .tile-icon.soft { font-size: 1.02rem; opacity: 0.88; }
+    .tile-tag { font-size: 0.52rem; font-weight: 800; color: #1e293b; margin-top: 2px; }
+
+    .tokens-layer {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      pointer-events: none;
+      z-index: 4;
+    }
+    .token {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 0.9rem;
+      border: 2.5px solid #fff;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.34);
+      transition: transform 0.16s ease;
+    }
+    .token.t1 { background: var(--p1); }
+    .token.t2 { background: var(--p2); }
+    .token.hop { transform: translateY(-7px) scale(1.16); }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.68);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      z-index: 100;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-card {
+      background: #fff;
+      width: 100%;
+      max-width: 420px;
+      border-radius: 22px;
+      padding: 20px 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      animation: popIn 0.2s ease;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .quiz-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
+    .q-badge { font-size: 0.72rem; font-weight: 800; padding: 4px 9px; border-radius: 999px; background: #eef2ff; color: #4338ca; }
+    .q-controls { display: flex; align-items: center; gap: 8px; }
+    .lifeline-btn {
+      background: #fef3c7; color: #92400e; border: 2px solid #f59e0b;
+      padding: 4px 10px; border-radius: 999px; font-size: 0.76rem; font-weight: 900; cursor: pointer;
+    }
+    .lifeline-btn:disabled { background: #f1f5f9; color: #94a3b8; border-color: #cbd5e1; cursor: not-allowed; text-decoration: line-through; }
+    .timer-pill { font-size: 0.82rem; font-weight: 900; background: #fee2e2; color: #b91c1c; padding: 4px 9px; border-radius: 999px; min-width: 44px; text-align: center; }
+    .q-text { font-size: 1.06rem; font-weight: 800; color: #0f172a; margin: 10px 0 14px; line-height: 1.38; }
+    .options-grid { display: grid; gap: 9px; }
+    .opt-btn {
+      text-align: left; padding: 12px 14px; border-radius: 12px;
+      border: 2px solid var(--border); background: #fff; font-size: 0.92rem; font-weight: 700; color: #1e293b; cursor: pointer;
+    }
+    .opt-btn.correct { background: #dcfce7; border-color: #16a34a; color: #14532d; }
+    .opt-btn.wrong { background: #fee2e2; border-color: #dc2626; color: #7f1d1d; }
+    .opt-btn.eliminated { opacity: 0.28; text-decoration: line-through; pointer-events: none; }
+    .q-feedback { margin-top: 10px; font-size: 0.85rem; font-weight: 800; text-align: center; min-height: 20px; }
+
+    .mystery-card { text-align: center; background: linear-gradient(135deg, #312e81, #581c87); color: #fff; }
+    .mystery-spin { font-size: 3rem; margin: 10px 0; }
+
+    .share-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+    .share-btn { border: none; padding: 10px; border-radius: 11px; font-weight: 800; font-size: 0.82rem; cursor: pointer; color: #fff; }
+    .btn-wa { background: #16a34a; }
+    .btn-fb { background: #1877f2; }
+    .btn-copy { grid-column: span 2; background: #334155; }
+    .score-preview {
+      background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px;
+      padding: 10px; font-family: monospace; font-size: 0.78rem; white-space: pre-line; text-align: left; color: #1e293b; margin: 10px 0;
+    }
+    .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+    .btn-primary {
+      background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+      color: #fff; border: none; padding: 12px; border-radius: 12px; font-weight: 900; cursor: pointer; box-shadow: 0 3px 0 #047857;
+    }
+    .btn-secondary {
+      background: #f1f5f9; color: #334155; border: none; padding: 12px;
+      border-radius: 12px; font-weight: 800; cursor: pointer; text-decoration: none; display: grid; place-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="game-shell">
+    <header class="top-bar">
+      <a href="index.html" class="home-link">← Home</a>
+      <span class="mode-pill" id="headerModePill">🇺🇸 US Quick Match</span>
+      <div class="top-right">
+        <span class="streak-chip" id="headerStreak">🔥 0</span>
+        <button class="icon-btn" id="soundBtn" aria-label="Toggle Sound">🔊</button>
+      </div>
+    </header>
+
+    <!-- TOP DOCK: PARENT / COMPUTER SIDE -->
+    <section class="player-dock p2" id="dockP2" aria-label="Parent Player Controls">
+      <div class="dock-info">
+        <div class="dock-row-1">
+          <span class="p-name">👑 <span id="p2Label">Parent</span></span>
+          <span class="score-pill" id="p2Score">⭐ 0 pts</span>
+        </div>
+        <div class="dock-row-2">
+          <span id="p2Pos">Tile 0/24</span>
+          <span class="lifeline-badge" id="p2Life">✂️ 50-50</span>
+        </div>
+      </div>
+      <button class="roll-btn p2-btn" id="rollBtnP2" disabled>
+        <span class="dice-face" id="diceFaceP2">🎲</span> <span id="rollTxtP2">Roll</span>
+      </button>
+    </section>
+
+    <div class="status-banner" id="statusBanner">🦸‍♂️ Kid's turn! Tap Roll below to start.</div>
+
+    <div class="board-frame" id="board"></div>
+
+    <!-- BOTTOM DOCK: KID SIDE -->
+    <section class="player-dock p1 active" id="dockP1" aria-label="Kid Player Controls">
+      <div class="dock-info">
+        <div class="dock-row-1">
+          <span class="p-name"><span id="p1AvIcon">🦸‍♂️</span> <span id="p1Label">Kid (G5)</span></span>
+          <span class="score-pill" id="p1Score">⭐ 0 pts</span>
+        </div>
+        <div class="dock-row-2">
+          <span id="p1Pos">Tile 0/24</span>
+          <span class="lifeline-badge" id="p1Life">✂️ 50-50</span>
+        </div>
+      </div>
+      <button class="roll-btn p1-btn" id="rollBtnP1">
+        <span class="dice-face" id="diceFaceP1">🎲</span> Roll
+      </button>
+    </section>
+  </main>
+
+  <!-- QUIZ MODAL -->
+  <div class="modal-overlay" id="quizModal">
+    <div class="modal-card">
+      <div class="quiz-top">
+        <span class="q-badge" id="qBadge">Grade 5 • Math</span>
+        <div class="q-controls">
+          <button class="lifeline-btn" id="use5050Btn">✂️ 50-50</button>
+          <span class="timer-pill" id="qTimer">15s</span>
+        </div>
+      </div>
+      <div class="q-text" id="qText">Question...</div>
+      <div class="options-grid" id="optionsGrid"></div>
+      <div class="q-feedback" id="qFeedback"></div>
+    </div>
+  </div>
+
+  <!-- MYSTERY MODAL -->
+  <div class="modal-overlay" id="mysteryModal">
+    <div class="modal-card mystery-card">
+      <div style="font-size:0.85rem; font-weight:800; letter-spacing:1px; color:#fde68a;">MYSTERY TILE 13!</div>
+      <div class="mystery-spin" id="mysteryEmoji">❓</div>
+      <h3 id="mysteryTitle" style="font-size:1.25rem; margin-bottom:6px;">Spinning Twist...</h3>
+      <p id="mysteryDesc" style="font-size:0.88rem; color:#e0e7ff;">Hold tight!</p>
+    </div>
+  </div>
+
+  <!-- VICTORY MODAL -->
+  <div class="modal-overlay" id="victoryModal">
+    <div class="modal-card" style="text-align:center;">
+      <div style="font-size:2.8rem;">🏆</div>
+      <h2 id="winTitle" style="font-size:1.45rem; color:#1e1b4b; margin:4px 0;">Kid Wins!</h2>
+      <p id="winSub" style="font-size:0.85rem; color:#475569;"></p>
+      <div id="winStreakBanner" style="display:none; background:#fef3c7; color:#b45309; font-weight:800; font-size:0.82rem; padding:6px 10px; border-radius:10px; margin-top:8px;"></div>
+      <div class="score-preview" id="scorePreview"></div>
+      <div class="share-grid">
+        <button class="share-btn btn-wa" id="shareWaBtn">💬 WhatsApp</button>
+        <button class="share-btn btn-fb" id="shareFbBtn">📘 Facebook</button>
+        <button class="share-btn btn-copy" id="copyScoreBtn">📋 Copy Score & Link</button>
+      </div>
+      <div class="action-row">
+        <button class="btn-primary" id="playAgainBtn">🔄 Rematch</button>
+        <a href="index.html" class="btn-secondary">⚙️ Settings</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const ALLOWED_AVATARS = ["🦸‍♂️","🦸‍♀️","🦸","🚀","🦖","🤖"];
+    const pickedAvatar = ALLOWED_AVATARS.includes(params.get("avatar")) ? params.get("avatar") : "🦸‍♂️";
+
+    const SPIRAL_COORDS = [
+      [0,0],[0,1],[0,2],[0,3],[0,4],
+      [1,4],[2,4],[3,4],[4,4],
+      [4,3],[4,2],[4,1],[4,0],
+      [3,0],[2,0],[1,0],
+      [1,1],[1,2],[1,3],
+      [2,3],[3,3],[3,2],[3,1],
+      [2,1],[2,2]
+    ];
+    const BONUS_TILES = [6, 17];
+    const SLIP_TILES = [10, 20];
+    const MYSTERY_TILE = 13;
+    const SITE_URL = "https://gradeclash.com";
+    const SUBJECT_THEMES = [
+      { cls: "tile-math", icon: "➕", tag: "MATH" },
+      { cls: "tile-sci",  icon: "🔬", tag: "SCI" },
+      { cls: "tile-hist", icon: "🏛️", tag: "HIST" },
+      { cls: "tile-ela",  icon: "📖", tag: "ELA" }
+    ];
+
+    const QUESTIONS = {
+      1: [
+        {s:"Math", q:"What is 7 + 5?", o:["11","12","13","10"], a:1},
+        {s:"Science", q:"Which part of a plant grows underground?", o:["Leaf","Flower","Root","Stem"], a:2},
+        {s:"ELA", q:"Which word rhymes with 'cat'?", o:["Dog","Hat","Sun","Cup"], a:1},
+        {s:"Math", q:"How many sides does a triangle have?", o:["2","3","4","5"], a:1},
+        {s:"Science", q:"What star gives Earth light and warmth?", o:["Moon","Mars","The Sun","Venus"], a:2},
+        {s:"Social", q:"How many days are in one week?", o:["5","6","7","8"], a:2},
+        {s:"Math", q:"What is 15 - 6?", o:["8","9","10","7"], a:1},
+        {s:"Science", q:"Which animal lays eggs?", o:["Dog","Chicken","Cat","Cow"], a:1}
+      ],
+      2: [
+        {s:"Math", q:"What is 24 + 13?", o:["35","36","37","38"], a:2},
+        {s:"Science", q:"What do caterpillars turn into?", o:["Bees","Butterflies","Frogs","Spiders"], a:1},
+        {s:"Social", q:"Which US holiday celebrates Independence Day?", o:["July 4th","May 1st","June 10th","Oct 31st"], a:0},
+        {s:"ELA", q:"Which word is a noun?", o:["Run","Happy","Apple","Quickly"], a:2},
+        {s:"Math", q:"How many pennies equal one quarter?", o:["10","20","25","50"], a:2},
+        {s:"Science", q:"Which state of matter is ice?", o:["Liquid","Gas","Solid","Plasma"], a:2},
+        {s:"Math", q:"What is 50 - 18?", o:["32","34","28","42"], a:0},
+        {s:"Social", q:"What is the capital city of the United States?", o:["New York","Washington, D.C.","Chicago","Boston"], a:1}
+      ],
+      3: [
+        {s:"Math", q:"What is 7 × 8?", o:["54","56","58","64"], a:1},
+        {s:"Science", q:"Which planet is known as the Red Planet?", o:["Venus","Jupiter","Mars","Saturn"], a:2},
+        {s:"ELA", q:"What is the plural of 'mouse'?", o:["Mouses","Mice","Mices","Mouse"], a:1},
+        {s:"Math", q:"What is 45 ÷ 5?", o:["7","8","9","10"], a:2},
+        {s:"Social", q:"How many states are in the United States?", o:["48","50","52","49"], a:1},
+        {s:"Science", q:"Animals that eat only plants are called what?", o:["Carnivores","Herbivores","Omnivores","Predators"], a:1},
+        {s:"Math", q:"Which fraction is equal to one half?", o:["2/3","2/4","3/5","1/4"], a:1},
+        {s:"Social", q:"Which ocean is on the US West Coast?", o:["Atlantic","Indian","Pacific","Arctic"], a:2}
+      ],
+      4: [
+        {s:"Math", q:"What is 12 × 11?", o:["121","132","144","122"], a:1},
+        {s:"Science", q:"What process do plants use to make food from sunlight?", o:["Digestion","Photosynthesis","Evaporation","Gravity"], a:1},
+        {s:"Social", q:"Who was the first President of the United States?", o:["Abraham Lincoln","Thomas Jefferson","George Washington","John Adams"], a:2},
+        {s:"Math", q:"How many degrees are in a right angle?", o:["45°","90°","180°","360°"], a:1},
+        {s:"ELA", q:"Which word is an adjective in: 'The tall tree swayed'?", o:["The","Tall","Tree","Swayed"], a:1},
+        {s:"Science", q:"What is the largest organ of the human body?", o:["Heart","Brain","Liver","Skin"], a:3},
+        {s:"Math", q:"What is the perimeter of a square with side length 9?", o:["18","27","36","81"], a:2},
+        {s:"Social", q:"Which US state is the largest by land area?", o:["Texas","California","Alaska","Montana"], a:2}
+      ],
+      5: [
+        {s:"Math", q:"What is 3/4 as a decimal?", o:["0.25","0.50","0.75","0.80"], a:2},
+        {s:"Science", q:"Which gas do humans breathe in to survive?", o:["Carbon Dioxide","Oxygen","Helium","Nitrogen"], a:1},
+        {s:"History", q:"In what year was the US Declaration of Independence signed?", o:["1776","1789","1812","1620"], a:0},
+        {s:"Math", q:"What is the volume of a box that is 3 × 4 × 5?", o:["12","45","60","75"], a:2},
+        {s:"ELA", q:"What is a word with the opposite meaning called?", o:["Synonym","Antonym","Homophone","Prefix"], a:1},
+        {s:"Science", q:"Which planet has the most prominent ring system?", o:["Mars","Mercury","Saturn","Neptune"], a:2},
+        {s:"Geography", q:"What is the longest river in the United States?", o:["Colorado","Missouri","Hudson","Rio Grande"], a:1},
+        {s:"Math", q:"Simplify: 8 + 2 × 5", o:["50","18","20","15"], a:1}
+      ],
+      6: [
+        {s:"Math", q:"What is 25% of 80?", o:["15","20","25","30"], a:1},
+        {s:"Science", q:"What is the powerhouse of the cell?", o:["Nucleus","Ribosome","Mitochondria","Vacuole"], a:2},
+        {s:"History", q:"Which ancient civilization built the pyramids of Giza?", o:["Romans","Greeks","Egyptians","Mayans"], a:2},
+        {s:"Math", q:"Solve for x: 3x = 27", o:["6","8","9","12"], a:2},
+        {s:"Geography", q:"Which continent has the most countries?", o:["Asia","Europe","Africa","South America"], a:2},
+        {s:"Science", q:"At what temperature does water boil in Celsius?", o:["50°C","90°C","100°C","212°C"], a:2},
+        {s:"Math", q:"What is the greatest common factor (GCF) of 18 and 24?", o:["3","6","9","12"], a:1},
+        {s:"ELA", q:"'The wind whispered through the trees' is an example of:", o:["Simile","Personification","Hyperbole","Alliteration"], a:1}
+      ],
+      7: [
+        {s:"Math", q:"What is (-6) × (-7)?", o:["-42","42","-13","13"], a:1},
+        {s:"Science", q:"What is the chemical symbol for Gold?", o:["Gd","Go","Ag","Au"], a:3},
+        {s:"History", q:"Which document begins with 'We the People'?", o:["Bill of Rights","US Constitution","Magna Carta","Gettysburg Address"], a:1},
+        {s:"Math", q:"The sum of angles inside any triangle is always:", o:["90°","180°","270°","360°"], a:1},
+        {s:"Science", q:"Which blood cells help fight infections?", o:["Red blood cells","White blood cells","Platelets","Plasma"], a:1},
+        {s:"Math", q:"Solve: 2x + 5 = 19", o:["6","7","8","12"], a:1},
+        {s:"Geography", q:"What is the capital of Canada?", o:["Toronto","Vancouver","Ottawa","Montreal"], a:2},
+        {s:"ELA", q:"What does the Greek root 'bio' mean?", o:["Earth","Life","Water","Time"], a:1}
+      ],
+      8: [
+        {s:"Math", q:"What is the square root of 144?", o:["11","12","13","14"], a:1},
+        {s:"Science", q:"Newton's Second Law states Force equals Mass times:", o:["Velocity","Speed","Acceleration","Gravity"], a:2},
+        {s:"History", q:"Who issued the Emancipation Proclamation in 1863?", o:["Ulysses S. Grant","Abraham Lincoln","Andrew Jackson","Theodore Roosevelt"], a:1},
+        {s:"Math", q:"In a right triangle with legs 3 and 4, what is the hypotenuse?", o:["5","6","7","8"], a:0},
+        {s:"Science", q:"Which element has the atomic number 1?", o:["Helium","Carbon","Oxygen","Hydrogen"], a:3},
+        {s:"Math", q:"What is 2⁵ (2 to the 5th power)?", o:["10","16","32","64"], a:2},
+        {s:"History", q:"The Louisiana Purchase doubled the US in which year?", o:["1776","1803","1849","1865"], a:1},
+        {s:"Science", q:"What type of rock is formed from cooled magma?", o:["Sedimentary","Metamorphic","Igneous","Limestone"], a:2}
+      ],
+      parent: [
+        {s:"Science", q:"Which planet in our solar system rotates on its side?", o:["Neptune","Uranus","Saturn","Venus"], a:1},
+        {s:"History", q:"Which US President served the only non-consecutive terms?", o:["Grover Cleveland","Woodrow Wilson","James Monroe","John Adams"], a:0},
+        {s:"Math", q:"What is the only even prime number?", o:["0","2","4","6"], a:1},
+        {s:"Geography", q:"Which US state has the longest coastline?", o:["California","Florida","Alaska","Hawaii"], a:2},
+        {s:"Science", q:"What is the hardest naturally occurring mineral on Earth?", o:["Quartz","Titanium","Diamond","Topaz"], a:2},
+        {s:"ELA", q:"What is a word that reads the same forward and backward?", o:["Anagram","Palindrome","Oxymoron","Acronym"], a:1},
+        {s:"History", q:"In what year did humans first land on the Moon?", o:["1965","1967","1969","1971"], a:2},
+        {s:"Science", q:"How many bones are in the adult human body?", o:["186","206","226","256"], a:1},
+        {s:"Geography", q:"Which river flows through the Grand Canyon?", o:["Mississippi","Colorado","Rio Grande","Columbia"], a:1},
+        {s:"Math", q:"What is 15% of 200?", o:["20","25","30","35"], a:2},
+        {s:"Science", q:"Which vitamin is primarily produced when skin is exposed to sunlight?", o:["Vitamin A","Vitamin B12","Vitamin C","Vitamin D"], a:3},
+        {s:"History", q:"Which amendment to the US Constitution granted women the right to vote?", o:["15th","18th","19th","21st"], a:2}
+      ]
+    };
+
+    let soundEnabled = true;
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let actx = null;
+    function playTone(freq, dur=0.1, type="sine", vol=0.12) {
+      if (!soundEnabled) return;
+      try {
+        if (!actx) actx = new AudioCtx();
+        const o = actx.createOscillator();
+        const g = actx.createGain();
+        o.type = type; o.frequency.value = freq;
+        g.gain.setValueAtTime(vol, actx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
+        o.connect(g); g.connect(actx.destination);
+        o.start(); o.stop(actx.currentTime + dur);
+      } catch(e){}
+    }
+    const sfx = {
+      hop: () => playTone(520, 0.08, "triangle", 0.1),
+      correct: () => { playTone(523,0.1); setTimeout(()=>playTone(659,0.12),90); setTimeout(()=>playTone(784,0.18),180); },
+      wrong: () => { playTone(220,0.18,"sawtooth",0.09); setTimeout(()=>playTone(170,0.22,"sawtooth",0.09),140); },
+      slice: () => playTone(920, 0.09, "square", 0.08),
+      win: () => [523,659,784,1046].forEach((f,i)=>setTimeout(()=>playTone(f,0.22,"triangle",0.14), i*110))
+    };
+
+    function getTodayKey() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+    function getDailyNumber() {
+      return Math.max(1, Math.floor((new Date() - new Date(2026, 0, 1)) / 86400000) + 1);
+    }
+    function seededRandom(seed) {
+      let x = Math.sin(seed++) * 10000;
+      return x - Math.floor(x);
+    }
+    function getStreakData() {
+      try { return JSON.parse(localStorage.getItem("gradeclash_streak_v1")) || { streak: 0, best: 0, lastDate: "" }; }
+      catch(e) { return { streak: 0, best: 0, lastDate: "" }; }
+    }
+    function recordDailyWin() {
+      const data = getStreakData();
+      const today = getTodayKey();
+      if (data.lastDate !== today) {
+        const yest = new Date(Date.now() - 86400000);
+        const yKey = `${yest.getFullYear()}-${String(yest.getMonth()+1).padStart(2,'0')}-${String(yest.getDate()).padStart(2,'0')}`;
+        data.streak = (data.lastDate === yKey) ? data.streak + 1 : 1;
+        data.best = Math.max(data.best, data.streak);
+        data.lastDate = today;
+        try { localStorage.setItem("gradeclash_streak_v1", JSON.stringify(data)); } catch(e){}
+      }
+      document.getElementById("headerStreak").textContent = `🔥 ${data.streak}`;
+      return data;
+    }
+
+    let state = {
+      isDaily: params.get("daily") === "1",
+      playMode: params.get("play") === "solo" ? "solo" : "pvp",
+      diffMode: params.get("diff") === "same" ? "same" : "fair",
+      grade: Math.min(8, Math.max(1, parseInt(params.get("grade") || "5", 10))),
+      avatar: pickedAvatar,
+      turn: 0,
+      pos: [0, 0],
+      score: [0, 0],
+      lifeline: [true, true],
+      turnsCount: [0, 0],
+      correctCount: [0, 0],
+      busy: false,
+      dailySeed: 1,
+      usedQ: new Set(),
+      timerId: null
+    };
+
+    const boardEl = document.getElementById("board");
+    const rollBtnP1 = document.getElementById("rollBtnP1");
+    const rollBtnP2 = document.getElementById("rollBtnP2");
+    const diceFaceP1 = document.getElementById("diceFaceP1");
+    const diceFaceP2 = document.getElementById("diceFaceP2");
+    const statusBanner = document.getElementById("statusBanner");
+    const quizModal = document.getElementById("quizModal");
+    const mysteryModal = document.getElementById("mysteryModal");
+    const victoryModal = document.getElementById("victoryModal");
+
+    function renderBoard() {
+      boardEl.innerHTML = "";
+      const gridCells = Array.from({length: 5}, () => Array(5).fill(null));
+      SPIRAL_COORDS.forEach(([r, c], idx) => { gridCells[r][c] = idx; });
+
+      for (let r = 0; r < 5; r++) {
+        for (let c = 0; c < 5; c++) {
+          const idx = gridCells[r][c];
+          const tile = document.createElement("div");
+          tile.className = "tile";
+          tile.id = `tile-${idx}`;
+          let icon = "", tag = "", softIcon = false;
+          if (idx === 0) { tile.classList.add("tile-start"); icon = "🚩"; tag = "START"; }
+          else if (idx === 24) { tile.classList.add("tile-finish"); icon = "🏆"; tag = "WIN"; }
+          else if (BONUS_TILES.includes(idx)) { tile.classList.add("tile-bonus"); icon = "⭐"; tag = "+2"; }
+          else if (SLIP_TILES.includes(idx)) { tile.classList.add("tile-slip"); icon = "🍌"; tag = "-2"; }
+          else if (idx === MYSTERY_TILE) { tile.classList.add("tile-mystery"); icon = "❓"; tag = "MYSTERY"; }
+          else {
+            const theme = SUBJECT_THEMES[idx % SUBJECT_THEMES.length];
+            tile.classList.add(theme.cls);
+            icon = theme.icon; tag = theme.tag; softIcon = true;
+          }
+          tile.innerHTML = `
+            <span class="tile-num">${idx}</span>
+            <span class="tile-icon${softIcon ? " soft" : ""}">${icon}</span>
+            <span class="tile-tag">${tag}</span>
+            <div class="tokens-layer" id="tokens-${idx}"></div>
+          `;
+          boardEl.appendChild(tile);
+        }
+      }
+      renderTokens();
+    }
+
+    function renderTokens(hopPlayer = -1) {
+      for (let i = 0; i <= 24; i++) {
+        const layer = document.getElementById(`tokens-${i}`);
+        if (layer) layer.innerHTML = "";
+      }
+      [0, 1].forEach(p => {
+        const layer = document.getElementById(`tokens-${state.pos[p]}`);
+        if (layer) {
+          const t = document.createElement("div");
+          t.className = `token ${p===0 ? "t1" : "t2"}${hopPlayer===p ? " hop" : ""}`;
+          t.textContent = p === 0 ? state.avatar : "👑";
+          layer.appendChild(t);
+        }
+      });
+    }
+
+    function updateHUD() {
+      const p1Name = `Kid (G${state.grade})`;
+      const p2Name = state.playMode === "solo" ? "Computer" : (state.diffMode === "fair" ? "Parent" : `Player 2 (G${state.grade})`);
+      document.getElementById("p1AvIcon").textContent = state.avatar;
+      document.getElementById("p1Label").textContent = p1Name;
+      document.getElementById("p2Label").textContent = p2Name;
+      document.getElementById("p1Pos").textContent = `Tile ${state.pos[0]}/24`;
+      document.getElementById("p2Pos").textContent = `Tile ${state.pos[1]}/24`;
+      document.getElementById("p1Score").textContent = `⭐ ${state.score[0]} pts`;
+      document.getElementById("p2Score").textContent = `⭐ ${state.score[1]} pts`;
+      document.getElementById("p1Life").className = `lifeline-badge${state.lifeline[0] ? "" : " used"}`;
+      document.getElementById("p2Life").className = `lifeline-badge${state.lifeline[1] ? "" : " used"}`;
+
+      document.getElementById("dockP1").classList.toggle("active", state.turn === 0);
+      document.getElementById("dockP2").classList.toggle("active", state.turn === 1);
+
+      rollBtnP1.disabled = state.busy || state.turn !== 0;
+      rollBtnP2.disabled = state.busy || state.turn !== 1 || state.playMode === "solo";
+      document.getElementById("rollTxtP2").textContent = (state.playMode === "solo" && state.turn === 1) ? "Auto" : "Roll";
+
+      document.getElementById("headerModePill").textContent = state.isDaily ? `🇺🇸 US Daily #${getDailyNumber()}` : (state.playMode==="solo" ? "🇺🇸 US Solo Mode" : "🇺🇸 US Quick Match");
+      document.getElementById("headerStreak").textContent = `🔥 ${getStreakData().streak}`;
+    }
+
+    function pickQuestion(playerIdx) {
+      const poolKey = (playerIdx === 1 && state.diffMode === "fair") ? "parent" : state.grade;
+      const pool = QUESTIONS[poolKey] || QUESTIONS[5];
+      let available = pool.map((q, i) => ({...q, id: `${poolKey}-${i}`})).filter(q => !state.usedQ.has(q.id));
+      if (available.length === 0) {
+        pool.forEach((_, i) => state.usedQ.delete(`${poolKey}-${i}`));
+        available = pool.map((q, i) => ({...q, id: `${poolKey}-${i}`}));
+      }
+      const idx = state.isDaily
+        ? Math.floor(seededRandom(state.dailySeed++) * available.length)
+        : Math.floor(Math.random() * available.length);
+      const chosen = available[idx];
+      state.usedQ.add(chosen.id);
+      return { ...chosen, tierLabel: poolKey === "parent" ? "Parent Tier" : `Grade ${state.grade}` };
+    }
+
+    function handleRoll(playerIdx) {
+      if (state.busy || state.turn !== playerIdx) return;
+      state.busy = true;
+      updateHUD();
+
+      const activeDice = playerIdx === 0 ? diceFaceP1 : diceFaceP2;
+      activeDice.classList.add("rolling");
+
+      const rollVal = state.isDaily
+        ? Math.floor(seededRandom(state.dailySeed++) * 6) + 1
+        : Math.floor(Math.random() * 6) + 1;
+
+      setTimeout(() => {
+        activeDice.classList.remove("rolling");
+        // Keep dice icon as 🎲 permanently (never switches to plain outline boxes)
+        activeDice.textContent = "🎲";
+        state.turnsCount[playerIdx]++;
+
+        if (state.playMode === "solo" && playerIdx === 1) {
+          statusBanner.textContent = `🤖 Computer rolled a ${rollVal}... answering trivia!`;
+          setTimeout(() => {
+            if (Math.random() < 0.72) {
+              state.correctCount[1]++;
+              state.score[1] += 10;
+              sfx.correct();
+              statusBanner.textContent = `🤖 Computer got it right! (+10 pts, +${rollVal} tiles)`;
+              animateMove(1, rollVal);
+            } else {
+              sfx.wrong();
+              statusBanner.textContent = `🤖 Computer missed! Your turn next.`;
+              setTimeout(nextTurn, 900);
+            }
+          }, 950);
+        } else {
+          const pName = playerIdx === 0 ? `${state.avatar} Kid` : (state.diffMode === "fair" ? "👑 Parent" : "👑 Player 2");
+          statusBanner.textContent = `${pName} rolled a ${rollVal}! Answer to move +${rollVal} tiles.`;
+          openQuiz(rollVal);
+        }
+      }, 450);
+    }
+
+    function openQuiz(rollVal) {
+      const q = pickQuestion(state.turn);
+      const pLabel = state.turn === 0 ? `${state.avatar} Kid (G${state.grade})` : (state.diffMode === "fair" ? "👑 Parent" : "👑 Player 2");
+      document.getElementById("qBadge").textContent = `${pLabel} • ${q.s} • 🎲 +${rollVal}`;
+      document.getElementById("qText").textContent = q.q;
+      document.getElementById("qFeedback").textContent = "";
+
+      const lifeBtn = document.getElementById("use5050Btn");
+      lifeBtn.disabled = !state.lifeline[state.turn];
+      lifeBtn.onclick = () => {
+        if (!state.lifeline[state.turn]) return;
+        state.lifeline[state.turn] = false;
+        lifeBtn.disabled = true;
+        sfx.slice(); updateHUD();
+        const btns = Array.from(document.querySelectorAll(".opt-btn"));
+        [0,1,2,3].filter(i => i !== q.a).sort(() => Math.random() - 0.5).slice(0, 2)
+          .forEach(i => btns[i].classList.add("eliminated"));
+      };
+
+      const grid = document.getElementById("optionsGrid");
+      grid.innerHTML = "";
+      let answered = false;
+      q.o.forEach((optText, idx) => {
+        const b = document.createElement("button");
+        b.className = "opt-btn";
+        b.textContent = `${["A","B","C","D"][idx]}. ${optText}`;
+        b.onclick = () => {
+          if (answered) return;
+          answered = true;
+          clearInterval(state.timerId);
+          finishQuiz(idx === q.a, q.a, idx, rollVal);
+        };
+        grid.appendChild(b);
+      });
+
+      let secs = 15;
+      const timerEl = document.getElementById("qTimer");
+      timerEl.textContent = `${secs}s`;
+      clearInterval(state.timerId);
+      state.timerId = setInterval(() => {
+        secs--;
+        timerEl.textContent = `${secs}s`;
+        if (secs <= 0 && !answered) {
+          answered = true;
+          clearInterval(state.timerId);
+          finishQuiz(false, q.a, -1, rollVal);
+        }
+      }, 1000);
+
+      quizModal.classList.add("open");
+    }
+
+    function finishQuiz(isCorrect, correctIdx, chosenIdx, rollVal) {
+      const btns = document.querySelectorAll(".opt-btn");
+      btns.forEach(b => b.disabled = true);
+      if (btns[correctIdx]) btns[correctIdx].classList.add("correct");
+      if (!isCorrect && chosenIdx >= 0 && btns[chosenIdx]) btns[chosenIdx].classList.add("wrong");
+
+      const fb = document.getElementById("qFeedback");
+      if (isCorrect) {
+        state.correctCount[state.turn]++;
+        state.score[state.turn] += 10;
+        sfx.correct();
+        fb.style.color = "#15803d";
+        fb.textContent = `✅ Correct! +10 pts & moving +${rollVal} tiles!`;
+      } else {
+        sfx.wrong();
+        fb.style.color = "#b91c1c";
+        fb.textContent = chosenIdx === -1 ? "⏰ Time's up! No movement." : "❌ Not quite! Stay on current tile.";
+      }
+
+      setTimeout(() => {
+        quizModal.classList.remove("open");
+        if (isCorrect) animateMove(state.turn, rollVal);
+        else nextTurn();
+      }, 950);
+    }
+
+    function animateMove(playerIdx, steps) {
+      let remaining = Math.abs(steps);
+      const dir = steps >= 0 ? 1 : -1;
+      function step() {
+        if (remaining <= 0) { checkSpecialTile(playerIdx); return; }
+        const nextPos = Math.max(0, Math.min(24, state.pos[playerIdx] + dir));
+        state.pos[playerIdx] = nextPos;
+        sfx.hop(); renderTokens(playerIdx); updateHUD();
+        remaining--;
+        if (nextPos === 24 && dir > 0) { checkSpecialTile(playerIdx); return; }
+        setTimeout(step, 165);
+      }
+      step();
+    }
+
+    function triggerShake() {
+      boardEl.classList.remove("shake");
+      void boardEl.offsetWidth;
+      boardEl.classList.add("shake");
+    }
+
+    function checkSpecialTile(playerIdx) {
+      const pos = state.pos[playerIdx];
+      const opp = 1 - playerIdx;
+      const tileEl = document.getElementById(`tile-${pos}`);
+      if (tileEl) { tileEl.classList.add("glow"); setTimeout(() => tileEl.classList.remove("glow"), 700); }
+
+      if (pos >= 24) { showVictory(playerIdx); return; }
+
+      if (pos > 0 && state.pos[opp] === pos) {
+        state.pos[opp] = Math.max(0, state.pos[opp] - 2);
+        triggerShake(); sfx.wrong(); renderTokens(); updateHUD();
+        statusBanner.textContent = "💥 KNOCKOUT! Opponent bounced back 2 tiles!";
+      }
+
+      if (BONUS_TILES.includes(pos)) {
+        state.score[playerIdx] += 5;
+        sfx.correct(); updateHUD();
+        statusBanner.textContent = "⭐ Bonus Star! +5 pts & jumping +2 tiles!";
+        setTimeout(() => animateMove(playerIdx, 2), 450);
+        return;
+      }
+
+      if (SLIP_TILES.includes(pos)) {
+        triggerShake(); sfx.wrong();
+        statusBanner.textContent = "🍌 Slippery Detour! Sliding back 2 tiles!";
+        setTimeout(() => animateMove(playerIdx, -2), 500);
+        return;
+      }
+
+      if (pos === MYSTERY_TILE) { triggerMystery(playerIdx); return; }
+
+      setTimeout(nextTurn, 380);
+    }
+
+    function triggerMystery(playerIdx) {
+      const opp = 1 - playerIdx;
+      const twists = [
+        { emoji: "🚀", title: "Rocket Boost!", desc: "Zoom forward +2 bonus tiles!", act: () => animateMove(playerIdx, 2) },
+        { emoji: "🌪️", title: "Wind Gust!", desc: "Opponent pushed back -2 tiles!", act: () => {
+          state.pos[opp] = Math.max(0, state.pos[opp] - 2);
+          triggerShake(); renderTokens(); updateHUD(); setTimeout(nextTurn, 400);
+        }},
+        { emoji: "🔄", title: "Position Swap!", desc: "Both players trade places on the board!", act: () => {
+          const tmp = state.pos[playerIdx]; state.pos[playerIdx] = state.pos[opp]; state.pos[opp] = tmp;
+          triggerShake(); renderTokens(); updateHUD(); setTimeout(nextTurn, 400);
+        }}
+      ];
+      const pick = twists[Math.floor(Math.random() * twists.length)];
+      document.getElementById("mysteryEmoji").textContent = "❓";
+      document.getElementById("mysteryTitle").textContent = "Spinning Mystery Twist...";
+      document.getElementById("mysteryDesc").textContent = "What will Tile 13 reveal?";
+      mysteryModal.classList.add("open");
+      sfx.slice();
+      setTimeout(() => {
+        document.getElementById("mysteryEmoji").textContent = pick.emoji;
+        document.getElementById("mysteryTitle").textContent = pick.title;
+        document.getElementById("mysteryDesc").textContent = pick.desc;
+        sfx.correct();
+        setTimeout(() => { mysteryModal.classList.remove("open"); pick.act(); }, 1250);
+      }, 750);
+    }
+
+    function nextTurn() {
+      state.turn = 1 - state.turn;
+      state.busy = false;
+      updateHUD();
+      const name = state.turn === 0 ? `${state.avatar} Kid (G${state.grade})` : (state.playMode === "solo" ? "🤖 Computer" : (state.diffMode === "fair" ? "👑 Parent" : "👑 Player 2"));
+      statusBanner.textContent = `${name}'s turn! Tap Roll on your side.`;
+      if (state.playMode === "solo" && state.turn === 1) {
+        setTimeout(() => handleRoll(1), 650);
+      }
+    }
+
+    let latestShareText = "";
+    function showVictory(winnerIdx) {
+      sfx.win();
+      const winnerName = winnerIdx === 0 ? `${state.avatar} Kid (Grade ${state.grade})` : (state.playMode === "solo" ? "🤖 Computer" : (state.diffMode === "fair" ? "👑 Parent" : "👑 Player 2"));
+      document.getElementById("winTitle").textContent = `🏆 ${winnerName} Wins!`;
+      document.getElementById("winSub").textContent = `Tile 24 in ${state.turnsCount[winnerIdx]} turns • Score: ${state.score[winnerIdx]} pts`;
+
+      const streakBanner = document.getElementById("winStreakBanner");
+      if (state.isDaily) {
+        const sData = recordDailyWin();
+        streakBanner.style.display = "block";
+        streakBanner.textContent = `🔥 🇺🇸 US Daily #${getDailyNumber()} Saved! Streak: ${sData.streak} Day${sData.streak>1?"s":""}`;
+      } else {
+        streakBanner.style.display = "none";
+      }
+
+      const titleLine = state.isDaily ? `🎲 GradeClash 🇺🇸 US Daily #${getDailyNumber()}` : `🎲 GradeClash: Kids vs. Parents (🇺🇸 US Grade ${state.grade})`;
+      latestShareText = `${titleLine}
+🏆 Winner: ${winnerName} (${state.score[winnerIdx]} pts)
+${state.avatar} Kid: Tile ${state.pos[0]}/24 | 👑 Opponent: Tile ${state.pos[1]}/24
+Play free: ${SITE_URL}`;
+      document.getElementById("scorePreview").textContent = latestShareText;
+      victoryModal.classList.add("open");
+    }
+
+    document.getElementById("shareWaBtn").onclick = () => window.open(`https://wa.me/?text=${encodeURIComponent(latestShareText)}`, "_blank");
+    document.getElementById("shareFbBtn").onclick = () => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE_URL)}&quote=${encodeURIComponent(latestShareText)}`, "_blank");
+    document.getElementById("copyScoreBtn").onclick = () => {
+      navigator.clipboard?.writeText(latestShareText).then(() => {
+        const b = document.getElementById("copyScoreBtn");
+        b.textContent = "✅ Copied!";
+        setTimeout(() => b.textContent = "📋 Copy Score & Link", 1800);
+      });
+    };
+
+    function initMatch() {
+      state.turn = 0; state.pos = [0, 0]; state.score = [0, 0];
+      state.lifeline = [true, true]; state.turnsCount = [0, 0]; state.correctCount = [0, 0];
+      state.busy = false; state.usedQ.clear();
+      state.dailySeed = getDailyNumber() * 137 + state.grade * 19;
+      victoryModal.classList.remove("open");
+      renderBoard(); updateHUD();
+      statusBanner.textContent = `${state.avatar} Kid (G${state.grade})'s turn! Tap Roll below.`;
+    }
+
+    rollBtnP1.onclick = () => handleRoll(0);
+    rollBtnP2.onclick = () => handleRoll(1);
+    document.getElementById("playAgainBtn").onclick = initMatch;
+    document.getElementById("soundBtn").onclick = (e) => {
+      soundEnabled = !soundEnabled;
+      e.target.textContent = soundEnabled ? "🔊" : "🔇";
+    };
+
+    initMatch();
+  </script>
+</body>
+</html>
