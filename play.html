@@ -242,11 +242,12 @@
     .token.t2 { background: var(--p2); }
     .token.hop { transform: translateY(-7px) scale(1.16); }
 
+    /* MODALS */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15,23,42,0.68);
-      backdrop-filter: blur(4px);
+      background: rgba(15,23,42,0.72);
+      backdrop-filter: blur(5px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -258,34 +259,167 @@
       background: #fff;
       width: 100%;
       max-width: 420px;
-      border-radius: 22px;
+      border-radius: 24px;
       padding: 20px 18px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      box-shadow: 0 22px 54px rgba(0,0,0,0.34);
       animation: popIn 0.2s ease;
     }
     @keyframes popIn {
       from { transform: scale(0.92); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
     }
-    .quiz-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
-    .q-badge { font-size: 0.72rem; font-weight: 800; padding: 4px 9px; border-radius: 999px; background: #eef2ff; color: #4338ca; }
-    .q-controls { display: flex; align-items: center; gap: 8px; }
-    .lifeline-btn {
-      background: #fef3c7; color: #92400e; border: 2px solid #f59e0b;
-      padding: 4px 10px; border-radius: 999px; font-size: 0.76rem; font-weight: 900; cursor: pointer;
+
+    /* RESTORED RICH QUIZ MODAL (Matches earlier orange-banner design) */
+    .quiz-card {
+      padding: 0;
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.6);
     }
-    .lifeline-btn:disabled { background: #f1f5f9; color: #94a3b8; border-color: #cbd5e1; cursor: not-allowed; text-decoration: line-through; }
-    .timer-pill { font-size: 0.82rem; font-weight: 900; background: #fee2e2; color: #b91c1c; padding: 4px 9px; border-radius: 999px; min-width: 44px; text-align: center; }
-    .q-text { font-size: 1.06rem; font-weight: 800; color: #0f172a; margin: 10px 0 14px; line-height: 1.38; }
-    .options-grid { display: grid; gap: 9px; }
+    .quiz-banner {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #fff;
+      padding: 16px 16px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .quiz-banner.parent-theme {
+      background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+    }
+    .quiz-avatar-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: #2563eb;
+      border: 2.5px solid #fff;
+      display: grid;
+      place-items: center;
+      font-size: 1.55rem;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.22);
+    }
+    .quiz-banner.parent-theme .quiz-avatar-box {
+      background: #881337;
+    }
+    .quiz-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 0;
+    }
+    .quiz-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(0,0,0,0.22);
+      color: #fff;
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 999px;
+      width: fit-content;
+    }
+    .quiz-roll-line {
+      font-size: 0.88rem;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.18);
+    }
+    .timer-track {
+      width: 100%;
+      height: 5px;
+      background: #e2e8f0;
+    }
+    .timer-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+      transition: width 1s linear;
+    }
+    .quiz-body {
+      padding: 16px 18px 18px;
+    }
+    .quiz-control-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 8px 12px;
+      margin-bottom: 16px;
+    }
+    .timer-readout {
+      font-size: 0.92rem;
+      font-weight: 900;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .lifeline-btn {
+      background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
+      color: #1e1b4b;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #b45309;
+      transition: transform 0.1s;
+    }
+    .lifeline-btn:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 1px 0 #b45309; }
+    .lifeline-btn:disabled {
+      background: #e2e8f0;
+      color: #94a3b8;
+      box-shadow: none;
+      cursor: not-allowed;
+      text-decoration: line-through;
+    }
+    .q-text {
+      font-size: 1.14rem;
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 16px;
+      line-height: 1.38;
+    }
+    .options-grid { display: grid; gap: 10px; }
     .opt-btn {
-      text-align: left; padding: 12px 14px; border-radius: 12px;
-      border: 2px solid var(--border); background: #fff; font-size: 0.92rem; font-weight: 700; color: #1e293b; cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      padding: 11px 13px;
+      border-radius: 14px;
+      border: 1.5px solid #e2e8f0;
+      background: #fff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1e293b;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(15,23,42,0.04);
+      transition: all 0.12s;
+    }
+    .opt-btn:hover:not(:disabled) { border-color: #6366f1; background: #f8fafc; }
+    .opt-letter {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: #f1f5f9;
+      color: #334155;
+      font-size: 0.82rem;
+      font-weight: 900;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
     }
     .opt-btn.correct { background: #dcfce7; border-color: #16a34a; color: #14532d; }
+    .opt-btn.correct .opt-letter { background: #16a34a; color: #fff; }
     .opt-btn.wrong { background: #fee2e2; border-color: #dc2626; color: #7f1d1d; }
-    .opt-btn.eliminated { opacity: 0.28; text-decoration: line-through; pointer-events: none; }
-    .q-feedback { margin-top: 10px; font-size: 0.85rem; font-weight: 800; text-align: center; min-height: 20px; }
+    .opt-btn.wrong .opt-letter { background: #dc2626; color: #fff; }
+    .opt-btn.eliminated { opacity: 0.25; text-decoration: line-through; pointer-events: none; }
+    .q-feedback { margin-top: 12px; font-size: 0.86rem; font-weight: 800; text-align: center; min-height: 20px; }
 
     .mystery-card { text-align: center; background: linear-gradient(135deg, #312e81, #581c87); color: #fff; }
     .mystery-spin { font-size: 3rem; margin: 10px 0; }
@@ -361,19 +495,26 @@
     </section>
   </main>
 
-  <!-- QUIZ MODAL -->
+  <!-- RESTORED RICH QUIZ MODAL -->
   <div class="modal-overlay" id="quizModal">
-    <div class="modal-card">
-      <div class="quiz-top">
-        <span class="q-badge" id="qBadge">Grade 5 • Math</span>
-        <div class="q-controls">
-          <button class="lifeline-btn" id="use5050Btn">✂️ 50-50</button>
-          <span class="timer-pill" id="qTimer">15s</span>
+    <div class="modal-card quiz-card">
+      <div class="quiz-banner" id="quizBanner">
+        <div class="quiz-avatar-box" id="qAvatarBox">🦸‍♂️</div>
+        <div class="quiz-meta">
+          <div class="quiz-pill" id="qPill">Kid • Grade 5 • Math</div>
+          <div class="quiz-roll-line" id="qRollLine">🎲 Rolled 4 — Answer right to move +4!</div>
         </div>
       </div>
-      <div class="q-text" id="qText">Question...</div>
-      <div class="options-grid" id="optionsGrid"></div>
-      <div class="q-feedback" id="qFeedback"></div>
+      <div class="timer-track"><div class="timer-fill" id="qTimerBar"></div></div>
+      <div class="quiz-body">
+        <div class="quiz-control-bar">
+          <span class="timer-readout">⏱️ <span id="qTimer">15 sec</span></span>
+          <button class="lifeline-btn" id="use5050Btn">✂️ 50-50 Lifeline</button>
+        </div>
+        <div class="q-text" id="qText">Question...</div>
+        <div class="options-grid" id="optionsGrid"></div>
+        <div class="q-feedback" id="qFeedback"></div>
+      </div>
     </div>
   </div>
 
@@ -466,17 +607,17 @@
       4: [
         {s:"Math", q:"What is 12 × 11?", o:["121","132","144","122"], a:1},
         {s:"Science", q:"What process do plants use to make food from sunlight?", o:["Digestion","Photosynthesis","Evaporation","Gravity"], a:1},
-        {s:"Social", q:"Who was the first President of the United States?", o:["Abraham Lincoln","Thomas Jefferson","George Washington","John Adams"], a:2},
+        {s:"US History", q:"Who was the first President of the United States?", o:["Abraham Lincoln","Thomas Jefferson","George Washington","John Adams"], a:2},
         {s:"Math", q:"How many degrees are in a right angle?", o:["45°","90°","180°","360°"], a:1},
         {s:"ELA", q:"Which word is an adjective in: 'The tall tree swayed'?", o:["The","Tall","Tree","Swayed"], a:1},
         {s:"Science", q:"What is the largest organ of the human body?", o:["Heart","Brain","Liver","Skin"], a:3},
         {s:"Math", q:"What is the perimeter of a square with side length 9?", o:["18","27","36","81"], a:2},
-        {s:"Social", q:"Which US state is the largest by land area?", o:["Texas","California","Alaska","Montana"], a:2}
+        {s:"US History", q:"Who invented the practical incandescent light bulb in 1879?", o:["Thomas Edison","Wright Brothers","Henry Ford","Alexander Bell"], a:0}
       ],
       5: [
         {s:"Math", q:"What is 3/4 as a decimal?", o:["0.25","0.50","0.75","0.80"], a:2},
         {s:"Science", q:"Which gas do humans breathe in to survive?", o:["Carbon Dioxide","Oxygen","Helium","Nitrogen"], a:1},
-        {s:"History", q:"In what year was the US Declaration of Independence signed?", o:["1776","1789","1812","1620"], a:0},
+        {s:"US History", q:"In what year was the US Declaration of Independence signed?", o:["1776","1789","1812","1620"], a:0},
         {s:"Math", q:"What is the volume of a box that is 3 × 4 × 5?", o:["12","45","60","75"], a:2},
         {s:"ELA", q:"What is a word with the opposite meaning called?", o:["Synonym","Antonym","Homophone","Prefix"], a:1},
         {s:"Science", q:"Which planet has the most prominent ring system?", o:["Mars","Mercury","Saturn","Neptune"], a:2},
@@ -496,7 +637,7 @@
       7: [
         {s:"Math", q:"What is (-6) × (-7)?", o:["-42","42","-13","13"], a:1},
         {s:"Science", q:"What is the chemical symbol for Gold?", o:["Gd","Go","Ag","Au"], a:3},
-        {s:"History", q:"Which document begins with 'We the People'?", o:["Bill of Rights","US Constitution","Magna Carta","Gettysburg Address"], a:1},
+        {s:"US History", q:"Which document begins with 'We the People'?", o:["Bill of Rights","US Constitution","Magna Carta","Gettysburg Address"], a:1},
         {s:"Math", q:"The sum of angles inside any triangle is always:", o:["90°","180°","270°","360°"], a:1},
         {s:"Science", q:"Which blood cells help fight infections?", o:["Red blood cells","White blood cells","Platelets","Plasma"], a:1},
         {s:"Math", q:"Solve: 2x + 5 = 19", o:["6","7","8","12"], a:1},
@@ -506,26 +647,26 @@
       8: [
         {s:"Math", q:"What is the square root of 144?", o:["11","12","13","14"], a:1},
         {s:"Science", q:"Newton's Second Law states Force equals Mass times:", o:["Velocity","Speed","Acceleration","Gravity"], a:2},
-        {s:"History", q:"Who issued the Emancipation Proclamation in 1863?", o:["Ulysses S. Grant","Abraham Lincoln","Andrew Jackson","Theodore Roosevelt"], a:1},
+        {s:"US History", q:"Who issued the Emancipation Proclamation in 1863?", o:["Ulysses S. Grant","Abraham Lincoln","Andrew Jackson","Theodore Roosevelt"], a:1},
         {s:"Math", q:"In a right triangle with legs 3 and 4, what is the hypotenuse?", o:["5","6","7","8"], a:0},
         {s:"Science", q:"Which element has the atomic number 1?", o:["Helium","Carbon","Oxygen","Hydrogen"], a:3},
         {s:"Math", q:"What is 2⁵ (2 to the 5th power)?", o:["10","16","32","64"], a:2},
-        {s:"History", q:"The Louisiana Purchase doubled the US in which year?", o:["1776","1803","1849","1865"], a:1},
+        {s:"US History", q:"The Louisiana Purchase doubled the US in which year?", o:["1776","1803","1849","1865"], a:1},
         {s:"Science", q:"What type of rock is formed from cooled magma?", o:["Sedimentary","Metamorphic","Igneous","Limestone"], a:2}
       ],
       parent: [
         {s:"Science", q:"Which planet in our solar system rotates on its side?", o:["Neptune","Uranus","Saturn","Venus"], a:1},
-        {s:"History", q:"Which US President served the only non-consecutive terms?", o:["Grover Cleveland","Woodrow Wilson","James Monroe","John Adams"], a:0},
+        {s:"US History", q:"Which US President served the only non-consecutive terms?", o:["Grover Cleveland","Woodrow Wilson","James Monroe","John Adams"], a:0},
         {s:"Math", q:"What is the only even prime number?", o:["0","2","4","6"], a:1},
         {s:"Geography", q:"Which US state has the longest coastline?", o:["California","Florida","Alaska","Hawaii"], a:2},
         {s:"Science", q:"What is the hardest naturally occurring mineral on Earth?", o:["Quartz","Titanium","Diamond","Topaz"], a:2},
         {s:"ELA", q:"What is a word that reads the same forward and backward?", o:["Anagram","Palindrome","Oxymoron","Acronym"], a:1},
-        {s:"History", q:"In what year did humans first land on the Moon?", o:["1965","1967","1969","1971"], a:2},
+        {s:"US History", q:"In what year did humans first land on the Moon?", o:["1965","1967","1969","1971"], a:2},
         {s:"Science", q:"How many bones are in the adult human body?", o:["186","206","226","256"], a:1},
         {s:"Geography", q:"Which river flows through the Grand Canyon?", o:["Mississippi","Colorado","Rio Grande","Columbia"], a:1},
         {s:"Math", q:"What is 15% of 200?", o:["20","25","30","35"], a:2},
         {s:"Science", q:"Which vitamin is primarily produced when skin is exposed to sunlight?", o:["Vitamin A","Vitamin B12","Vitamin C","Vitamin D"], a:3},
-        {s:"History", q:"Which amendment to the US Constitution granted women the right to vote?", o:["15th","18th","19th","21st"], a:2}
+        {s:"US History", q:"Which amendment to the US Constitution granted women the right to vote?", o:["15th","18th","19th","21st"], a:2}
       ]
     };
 
@@ -715,7 +856,6 @@
 
       setTimeout(() => {
         activeDice.classList.remove("rolling");
-        // Keep dice icon as 🎲 permanently (never switches to plain outline boxes)
         activeDice.textContent = "🎲";
         state.turnsCount[playerIdx]++;
 
@@ -744,8 +884,14 @@
 
     function openQuiz(rollVal) {
       const q = pickQuestion(state.turn);
-      const pLabel = state.turn === 0 ? `${state.avatar} Kid (G${state.grade})` : (state.diffMode === "fair" ? "👑 Parent" : "👑 Player 2");
-      document.getElementById("qBadge").textContent = `${pLabel} • ${q.s} • 🎲 +${rollVal}`;
+      const isParent = state.turn === 1;
+      const pName = isParent ? (state.diffMode === "fair" ? "Parent" : "Player 2") : "Kid";
+
+      const banner = document.getElementById("quizBanner");
+      banner.classList.toggle("parent-theme", isParent);
+      document.getElementById("qAvatarBox").textContent = isParent ? "👑" : state.avatar;
+      document.getElementById("qPill").textContent = `${pName} • ${q.tierLabel} • ${q.s}`;
+      document.getElementById("qRollLine").textContent = `🎲 Rolled ${rollVal} — Answer right to move +${rollVal}!`;
       document.getElementById("qText").textContent = q.q;
       document.getElementById("qFeedback").textContent = "";
 
@@ -764,10 +910,11 @@
       const grid = document.getElementById("optionsGrid");
       grid.innerHTML = "";
       let answered = false;
+      const letters = ["A", "B", "C", "D"];
       q.o.forEach((optText, idx) => {
         const b = document.createElement("button");
         b.className = "opt-btn";
-        b.textContent = `${["A","B","C","D"][idx]}. ${optText}`;
+        b.innerHTML = `<span class="opt-letter">${letters[idx]}</span><span>${optText}</span>`;
         b.onclick = () => {
           if (answered) return;
           answered = true;
@@ -779,11 +926,18 @@
 
       let secs = 15;
       const timerEl = document.getElementById("qTimer");
-      timerEl.textContent = `${secs}s`;
+      const timerBar = document.getElementById("qTimerBar");
+      timerEl.textContent = `${secs} sec`;
+      timerBar.style.transition = "none";
+      timerBar.style.width = "100%";
+      void timerBar.offsetWidth;
+      timerBar.style.transition = "width 1s linear";
+
       clearInterval(state.timerId);
       state.timerId = setInterval(() => {
         secs--;
-        timerEl.textContent = `${secs}s`;
+        timerEl.textContent = `${secs} sec`;
+        timerBar.style.width = `${Math.max(0, (secs / 15) * 100)}%`;
         if (secs <= 0 && !answered) {
           answered = true;
           clearInterval(state.timerId);

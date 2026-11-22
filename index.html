@@ -188,7 +188,6 @@
       box-shadow: 0 2px 6px rgba(79,70,229,0.16);
     }
 
-    /* Kid's 6 Hero Avatars */
     .avatar-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -253,6 +252,107 @@
       transition: transform 0.1s;
     }
     .start-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #047857; }
+
+    /* ATTRACTIVE SUGGESTION & FEEDBACK BOX */
+    .suggest-wrap {
+      max-width: 520px;
+      margin: 18px auto 0;
+      padding: 0 14px;
+    }
+    .suggest-card {
+      background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);
+      border: 2px solid #fde68a;
+      border-radius: 22px;
+      padding: 20px 18px;
+      box-shadow: 0 10px 26px rgba(245,158,11,0.12);
+    }
+    .suggest-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .suggest-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+      display: grid;
+      place-items: center;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(234,88,12,0.25);
+    }
+    .suggest-head h2 {
+      font-size: 1.08rem;
+      color: #1e1b4b;
+      line-height: 1.2;
+    }
+    .suggest-head p {
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .tag-chip {
+      border: 1.5px solid #fcd34d;
+      background: #fff;
+      color: #92400e;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 5px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .tag-chip.active {
+      background: #f59e0b;
+      color: #fff;
+      border-color: #d97706;
+    }
+    .suggest-input, .suggest-textarea {
+      width: 100%;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      color: #0f172a;
+      background: #fff;
+      margin-bottom: 8px;
+      outline: none;
+    }
+    .suggest-input:focus, .suggest-textarea:focus {
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 3px rgba(245,158,11,0.15);
+    }
+    .suggest-textarea { resize: vertical; min-height: 76px; }
+    .suggest-btn {
+      width: 100%;
+      background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 0.94rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #b45309;
+      transition: transform 0.1s;
+    }
+    .suggest-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #b45309; }
+    .suggest-msg {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-align: center;
+      color: #15803d;
+      min-height: 18px;
+    }
 
     .seo-section {
       max-width: 820px;
@@ -388,6 +488,31 @@
     </div>
   </main>
 
+  <!-- ATTRACTIVE SUGGESTION & FEEDBACK BOX -->
+  <section class="suggest-wrap" aria-label="Game Suggestions and Feedback">
+    <div class="suggest-card">
+      <div class="suggest-head">
+        <div class="suggest-icon">💡</div>
+        <div>
+          <h2>Have an Idea for GradeClash?</h2>
+          <p>Suggest new features, trivia questions, or updates!</p>
+        </div>
+      </div>
+
+      <div class="tag-row" id="suggestTags">
+        <button type="button" class="tag-chip active" data-tag="Feature Idea">✨ New Feature</button>
+        <button type="button" class="tag-chip" data-tag="Trivia Question">❓ Trivia Idea</button>
+        <button type="button" class="tag-chip" data-tag="Game Update">🎮 Game Update</button>
+        <button type="button" class="tag-chip" data-tag="Bug Report">🐛 Report Bug</button>
+      </div>
+
+      <input type="text" id="suggestName" class="suggest-input" placeholder="Your Name or Grade (Optional, e.g., Alex - Grade 5)" maxlength="60" />
+      <textarea id="suggestText" class="suggest-textarea" placeholder="Write your suggestion, favorite trivia question, or what we should add next..."></textarea>
+      <button type="button" class="suggest-btn" id="sendSuggestBtn">📩 Send Suggestion</button>
+      <div class="suggest-msg" id="suggestMsg"></div>
+    </div>
+  </section>
+
   <article class="seo-section">
     <h2>How to Play GradeClash (🇺🇸 US Grades 1–8)</h2>
     <p><strong>GradeClash</strong> is a free online <strong>kids vs. parents trivia board game</strong> built for US families and students in Grades 1 through 8. Pick your hero avatar and grade above, hit <strong>Start Match</strong>, and race inward along the 25-tile spiral from <strong>Start (0)</strong> to the <strong>Trophy Center (24)</strong>.</p>
@@ -425,6 +550,7 @@
 
   <script>
     let cfg = { daily: 0, play: "pvp", diff: "fair", grade: 5, avatar: "🦸‍♂️" };
+    let suggestTopic = "Feature Idea";
 
     function getTodayKey() {
       const d = new Date();
@@ -488,6 +614,36 @@
     document.getElementById("startGameBtn").onclick = () => {
       const qs = new URLSearchParams(cfg).toString();
       window.location.href = `play.html?${qs}`;
+    };
+
+    // Suggestion Box Logic
+    document.querySelectorAll(".tag-chip").forEach(chip => {
+      chip.onclick = () => {
+        document.querySelectorAll(".tag-chip").forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        suggestTopic = chip.dataset.tag;
+      };
+    });
+
+    document.getElementById("sendSuggestBtn").onclick = () => {
+      const text = document.getElementById("suggestText").value.trim();
+      const name = document.getElementById("suggestName").value.trim() || "GradeClash Player";
+      const msgEl = document.getElementById("suggestMsg");
+      if (!text) {
+        msgEl.style.color = "#dc2626";
+        msgEl.textContent = "Please type your suggestion first!";
+        return;
+      }
+      const subject = `GradeClash ${suggestTopic} from ${name}`;
+      const body = `Category: ${suggestTopic}
+From: ${name}
+
+Suggestion:
+${text}`;
+      window.location.href = `mailto:contact@gradeclash.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      msgEl.style.color = "#15803d";
+      msgEl.textContent = "✅ Opening your email app to send to contact@gradeclash.com — Thank you!";
+      document.getElementById("suggestText").value = "";
     };
 
     updateDailyInfo();
