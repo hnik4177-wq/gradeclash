@@ -548,6 +548,7 @@
     </div>
   </div>
 
+  <script src="questions.js"></script>
   <script>
     const params = new URLSearchParams(window.location.search);
     const ALLOWED_AVATARS = ["🦸‍♂️","🦸‍♀️","🦸","🚀","🦖","🤖"];
@@ -573,101 +574,9 @@
       { cls: "tile-ela",  icon: "📖", tag: "ELA" }
     ];
 
-    const QUESTIONS = {
-      1: [
-        {s:"Math", q:"What is 7 + 5?", o:["11","12","13","10"], a:1},
-        {s:"Science", q:"Which part of a plant grows underground?", o:["Leaf","Flower","Root","Stem"], a:2},
-        {s:"ELA", q:"Which word rhymes with 'cat'?", o:["Dog","Hat","Sun","Cup"], a:1},
-        {s:"Math", q:"How many sides does a triangle have?", o:["2","3","4","5"], a:1},
-        {s:"Science", q:"What star gives Earth light and warmth?", o:["Moon","Mars","The Sun","Venus"], a:2},
-        {s:"Social", q:"How many days are in one week?", o:["5","6","7","8"], a:2},
-        {s:"Math", q:"What is 15 - 6?", o:["8","9","10","7"], a:1},
-        {s:"Science", q:"Which animal lays eggs?", o:["Dog","Chicken","Cat","Cow"], a:1}
-      ],
-      2: [
-        {s:"Math", q:"What is 24 + 13?", o:["35","36","37","38"], a:2},
-        {s:"Science", q:"What do caterpillars turn into?", o:["Bees","Butterflies","Frogs","Spiders"], a:1},
-        {s:"Social", q:"Which US holiday celebrates Independence Day?", o:["July 4th","May 1st","June 10th","Oct 31st"], a:0},
-        {s:"ELA", q:"Which word is a noun?", o:["Run","Happy","Apple","Quickly"], a:2},
-        {s:"Math", q:"How many pennies equal one quarter?", o:["10","20","25","50"], a:2},
-        {s:"Science", q:"Which state of matter is ice?", o:["Liquid","Gas","Solid","Plasma"], a:2},
-        {s:"Math", q:"What is 50 - 18?", o:["32","34","28","42"], a:0},
-        {s:"Social", q:"What is the capital city of the United States?", o:["New York","Washington, D.C.","Chicago","Boston"], a:1}
-      ],
-      3: [
-        {s:"Math", q:"What is 7 × 8?", o:["54","56","58","64"], a:1},
-        {s:"Science", q:"Which planet is known as the Red Planet?", o:["Venus","Jupiter","Mars","Saturn"], a:2},
-        {s:"ELA", q:"What is the plural of 'mouse'?", o:["Mouses","Mice","Mices","Mouse"], a:1},
-        {s:"Math", q:"What is 45 ÷ 5?", o:["7","8","9","10"], a:2},
-        {s:"Social", q:"How many states are in the United States?", o:["48","50","52","49"], a:1},
-        {s:"Science", q:"Animals that eat only plants are called what?", o:["Carnivores","Herbivores","Omnivores","Predators"], a:1},
-        {s:"Math", q:"Which fraction is equal to one half?", o:["2/3","2/4","3/5","1/4"], a:1},
-        {s:"Social", q:"Which ocean is on the US West Coast?", o:["Atlantic","Indian","Pacific","Arctic"], a:2}
-      ],
-      4: [
-        {s:"Math", q:"What is 12 × 11?", o:["121","132","144","122"], a:1},
-        {s:"Science", q:"What process do plants use to make food from sunlight?", o:["Digestion","Photosynthesis","Evaporation","Gravity"], a:1},
-        {s:"US History", q:"Who was the first President of the United States?", o:["Abraham Lincoln","Thomas Jefferson","George Washington","John Adams"], a:2},
-        {s:"Math", q:"How many degrees are in a right angle?", o:["45°","90°","180°","360°"], a:1},
-        {s:"ELA", q:"Which word is an adjective in: 'The tall tree swayed'?", o:["The","Tall","Tree","Swayed"], a:1},
-        {s:"Science", q:"What is the largest organ of the human body?", o:["Heart","Brain","Liver","Skin"], a:3},
-        {s:"Math", q:"What is the perimeter of a square with side length 9?", o:["18","27","36","81"], a:2},
-        {s:"US History", q:"Who invented the practical incandescent light bulb in 1879?", o:["Thomas Edison","Wright Brothers","Henry Ford","Alexander Bell"], a:0}
-      ],
-      5: [
-        {s:"Math", q:"What is 3/4 as a decimal?", o:["0.25","0.50","0.75","0.80"], a:2},
-        {s:"Science", q:"Which gas do humans breathe in to survive?", o:["Carbon Dioxide","Oxygen","Helium","Nitrogen"], a:1},
-        {s:"US History", q:"In what year was the US Declaration of Independence signed?", o:["1776","1789","1812","1620"], a:0},
-        {s:"Math", q:"What is the volume of a box that is 3 × 4 × 5?", o:["12","45","60","75"], a:2},
-        {s:"ELA", q:"What is a word with the opposite meaning called?", o:["Synonym","Antonym","Homophone","Prefix"], a:1},
-        {s:"Science", q:"Which planet has the most prominent ring system?", o:["Mars","Mercury","Saturn","Neptune"], a:2},
-        {s:"Geography", q:"What is the longest river in the United States?", o:["Colorado","Missouri","Hudson","Rio Grande"], a:1},
-        {s:"Math", q:"Simplify: 8 + 2 × 5", o:["50","18","20","15"], a:1}
-      ],
-      6: [
-        {s:"Math", q:"What is 25% of 80?", o:["15","20","25","30"], a:1},
-        {s:"Science", q:"What is the powerhouse of the cell?", o:["Nucleus","Ribosome","Mitochondria","Vacuole"], a:2},
-        {s:"History", q:"Which ancient civilization built the pyramids of Giza?", o:["Romans","Greeks","Egyptians","Mayans"], a:2},
-        {s:"Math", q:"Solve for x: 3x = 27", o:["6","8","9","12"], a:2},
-        {s:"Geography", q:"Which continent has the most countries?", o:["Asia","Europe","Africa","South America"], a:2},
-        {s:"Science", q:"At what temperature does water boil in Celsius?", o:["50°C","90°C","100°C","212°C"], a:2},
-        {s:"Math", q:"What is the greatest common factor (GCF) of 18 and 24?", o:["3","6","9","12"], a:1},
-        {s:"ELA", q:"'The wind whispered through the trees' is an example of:", o:["Simile","Personification","Hyperbole","Alliteration"], a:1}
-      ],
-      7: [
-        {s:"Math", q:"What is (-6) × (-7)?", o:["-42","42","-13","13"], a:1},
-        {s:"Science", q:"What is the chemical symbol for Gold?", o:["Gd","Go","Ag","Au"], a:3},
-        {s:"US History", q:"Which document begins with 'We the People'?", o:["Bill of Rights","US Constitution","Magna Carta","Gettysburg Address"], a:1},
-        {s:"Math", q:"The sum of angles inside any triangle is always:", o:["90°","180°","270°","360°"], a:1},
-        {s:"Science", q:"Which blood cells help fight infections?", o:["Red blood cells","White blood cells","Platelets","Plasma"], a:1},
-        {s:"Math", q:"Solve: 2x + 5 = 19", o:["6","7","8","12"], a:1},
-        {s:"Geography", q:"What is the capital of Canada?", o:["Toronto","Vancouver","Ottawa","Montreal"], a:2},
-        {s:"ELA", q:"What does the Greek root 'bio' mean?", o:["Earth","Life","Water","Time"], a:1}
-      ],
-      8: [
-        {s:"Math", q:"What is the square root of 144?", o:["11","12","13","14"], a:1},
-        {s:"Science", q:"Newton's Second Law states Force equals Mass times:", o:["Velocity","Speed","Acceleration","Gravity"], a:2},
-        {s:"US History", q:"Who issued the Emancipation Proclamation in 1863?", o:["Ulysses S. Grant","Abraham Lincoln","Andrew Jackson","Theodore Roosevelt"], a:1},
-        {s:"Math", q:"In a right triangle with legs 3 and 4, what is the hypotenuse?", o:["5","6","7","8"], a:0},
-        {s:"Science", q:"Which element has the atomic number 1?", o:["Helium","Carbon","Oxygen","Hydrogen"], a:3},
-        {s:"Math", q:"What is 2⁵ (2 to the 5th power)?", o:["10","16","32","64"], a:2},
-        {s:"US History", q:"The Louisiana Purchase doubled the US in which year?", o:["1776","1803","1849","1865"], a:1},
-        {s:"Science", q:"What type of rock is formed from cooled magma?", o:["Sedimentary","Metamorphic","Igneous","Limestone"], a:2}
-      ],
-      parent: [
-        {s:"Science", q:"Which planet in our solar system rotates on its side?", o:["Neptune","Uranus","Saturn","Venus"], a:1},
-        {s:"US History", q:"Which US President served the only non-consecutive terms?", o:["Grover Cleveland","Woodrow Wilson","James Monroe","John Adams"], a:0},
-        {s:"Math", q:"What is the only even prime number?", o:["0","2","4","6"], a:1},
-        {s:"Geography", q:"Which US state has the longest coastline?", o:["California","Florida","Alaska","Hawaii"], a:2},
-        {s:"Science", q:"What is the hardest naturally occurring mineral on Earth?", o:["Quartz","Titanium","Diamond","Topaz"], a:2},
-        {s:"ELA", q:"What is a word that reads the same forward and backward?", o:["Anagram","Palindrome","Oxymoron","Acronym"], a:1},
-        {s:"US History", q:"In what year did humans first land on the Moon?", o:["1965","1967","1969","1971"], a:2},
-        {s:"Science", q:"How many bones are in the adult human body?", o:["186","206","226","256"], a:1},
-        {s:"Geography", q:"Which river flows through the Grand Canyon?", o:["Mississippi","Colorado","Rio Grande","Columbia"], a:1},
-        {s:"Math", q:"What is 15% of 200?", o:["20","25","30","35"], a:2},
-        {s:"Science", q:"Which vitamin is primarily produced when skin is exposed to sunlight?", o:["Vitamin A","Vitamin B12","Vitamin C","Vitamin D"], a:3},
-        {s:"US History", q:"Which amendment to the US Constitution granted women the right to vote?", o:["15th","18th","19th","21st"], a:2}
-      ]
+    const QUESTIONS = window.QUESTIONS || {
+      5: [{s:"Math", q:"What is 3/4 as a decimal?", o:["0.25","0.50","0.75","0.80"], a:2}],
+      parent: [{s:"US History", q:"In what year did humans first land on the Moon?", o:["1965","1967","1969","1971"], a:2}]
     };
 
     let soundEnabled = true;
@@ -739,6 +648,7 @@
       busy: false,
       dailySeed: 1,
       usedQ: new Set(),
+      lastSubj: ["", ""],
       timerId: null
     };
 
@@ -827,18 +737,36 @@
     }
 
     function pickQuestion(playerIdx) {
-      const poolKey = (playerIdx === 1 && state.diffMode === "fair") ? "parent" : state.grade;
-      const pool = QUESTIONS[poolKey] || QUESTIONS[5];
+      const poolKey = (playerIdx === 1 && state.diffMode === "fair") ? "parent" : String(state.grade);
+      const pool = QUESTIONS[poolKey] || QUESTIONS["5"] || [];
       let available = pool.map((q, i) => ({...q, id: `${poolKey}-${i}`})).filter(q => !state.usedQ.has(q.id));
       if (available.length === 0) {
         pool.forEach((_, i) => state.usedQ.delete(`${poolKey}-${i}`));
         available = pool.map((q, i) => ({...q, id: `${poolKey}-${i}`}));
       }
-      const idx = state.isDaily
-        ? Math.floor(seededRandom(state.dailySeed++) * available.length)
-        : Math.floor(Math.random() * available.length);
-      const chosen = available[idx];
+      // Subject-balanced picking so players get an exciting mix (Math, Science, History, ELA, Logic, Trick/Fun)
+      const bySubj = {};
+      available.forEach(item => {
+        const key = item.s || "General";
+        if (!bySubj[key]) bySubj[key] = [];
+        bySubj[key].push(item);
+      });
+      let subjKeys = Object.keys(bySubj);
+      if (subjKeys.length > 1 && state.lastSubj[playerIdx]) {
+        const filtered = subjKeys.filter(k => k !== state.lastSubj[playerIdx]);
+        if (filtered.length > 0) subjKeys = filtered;
+      }
+      const randSubj = state.isDaily
+        ? Math.floor(seededRandom(state.dailySeed++) * subjKeys.length)
+        : Math.floor(Math.random() * subjKeys.length);
+      const pickedSubj = subjKeys[randSubj];
+      const bucket = bySubj[pickedSubj];
+      const randQ = state.isDaily
+        ? Math.floor(seededRandom(state.dailySeed++) * bucket.length)
+        : Math.floor(Math.random() * bucket.length);
+      const chosen = bucket[randQ];
       state.usedQ.add(chosen.id);
+      state.lastSubj[playerIdx] = pickedSubj;
       return { ...chosen, tierLabel: poolKey === "parent" ? "Parent Tier" : `Grade ${state.grade}` };
     }
 
@@ -1106,7 +1034,7 @@ Play free: ${SITE_URL}`;
     function initMatch() {
       state.turn = 0; state.pos = [0, 0]; state.score = [0, 0];
       state.lifeline = [true, true]; state.turnsCount = [0, 0]; state.correctCount = [0, 0];
-      state.busy = false; state.usedQ.clear();
+      state.busy = false; state.usedQ.clear(); state.lastSubj = ["", ""];
       state.dailySeed = getDailyNumber() * 137 + state.grade * 19;
       victoryModal.classList.remove("open");
       renderBoard(); updateHUD();
